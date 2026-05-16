@@ -1,0 +1,15 @@
+.main-div{
+    background-color:#F8FAFC;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 350px;
+    height: 100vh;
+    border-radius: 10px;
+    margin: 5px;
+}
+
+.main-option{
+    margin-top: -350px;
+}
+
