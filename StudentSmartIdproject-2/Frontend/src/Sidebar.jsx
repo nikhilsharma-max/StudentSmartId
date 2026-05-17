@@ -33,8 +33,7 @@ const Sidebar = () => {
             <SidebarItem icon = {Bell} label="Notification" isActive={activeItem === "Notification"} collapse={collapse} onClick={() => setActiveItem("Notification")}  ></SidebarItem>
             <SidebarItem icon = {FileText} label="Report" isActive={activeItem === "Report"} collapse={collapse} onClick={() => setActiveItem("Report")}  ></SidebarItem>
         </div>
-        <div>
-
+        <div className='bottom-section'>
             <SidebarItem icon = {Settings} label="Setting" isActive={activeItem === "Setting"} collapse={collapse} onClick={() => setActiveItem("Setting")}  ></SidebarItem>
             <SidebarItem icon = {LogOut} label="Logout" isActive={activeItem === "Logout"} collapse={collapse} onClick={() => setActiveItem("Logout")}  ></SidebarItem>
         </div>

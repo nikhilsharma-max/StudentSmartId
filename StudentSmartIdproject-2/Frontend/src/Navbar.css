@@ -1,0 +1,22 @@
+.navbar{
+    height: 8vh;
+    border-radius: 10px 10px 0 0;
+    background-color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.school-name{
+    margin-left: 1.5rem;
+   font-size: xx-large;
+   font-weight: 700;
+}
+.support-icon{
+    margin-right: 2rem;
+}
+.school-name:hover{
+    cursor: pointer;
+}
+.support-icon:hover{
+    cursor: pointer;
+}

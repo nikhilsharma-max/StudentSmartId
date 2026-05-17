@@ -1,6 +1,6 @@
 import React from 'react'
 import './SidebarItem.css'
-import {PanelRight} from 'lucide-react';
+
 const Sidebarlogo = ({collapse}) => {
   return (
     <div>
@@ -15,8 +15,7 @@ const Sidebarlogo = ({collapse}) => {
             </div>
             }
         </div>
-      
-        
+           
     </div>
   )
 }

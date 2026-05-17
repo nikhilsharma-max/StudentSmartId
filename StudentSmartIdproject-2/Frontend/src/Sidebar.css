@@ -2,11 +2,10 @@
     background-color:#F8FAFC;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
     width: 320px;
     height: 100vh;
     border-radius: 10px;
-    margin: 5px;
+    margin: auto;
     transition: all 0.3s ease;
 }
 
@@ -15,15 +14,14 @@
     width: 80px;
     height: 100vh;
     border-radius: 10px;
-    margin: 5px;
+    margin: auto;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
      transition: all 0.3s ease;
 }
 
 .main-option{
-    margin-top: -670px;
+    
 }
 
 .admin-line{
@@ -34,13 +32,14 @@
 .sidebar-userpanel{
     display: flex;
     justify-content: center;
-   
+    height: 120px;
 }
 .sidebar-userpanel-collapse{
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+        height: 150px;
 }
 
 .collapse-icon{
@@ -54,4 +53,7 @@
 .collapse-icon-collapse{
     cursor: pointer;
     margin-top: -0.5rem;
+}
+.bottom-section{
+    margin-top: auto;
 }
