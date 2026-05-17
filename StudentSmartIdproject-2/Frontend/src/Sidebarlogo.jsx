@@ -1,18 +1,22 @@
 import React from 'react'
 import './SidebarItem.css'
-
-const Sidebarlogo = () => {
+import {PanelRight} from 'lucide-react';
+const Sidebarlogo = ({collapse}) => {
   return (
     <div>
         <div className='admin-section'>
+          
             <div className='image-item'>
                 <img className='admin-image' src="/user-image.png" alt="logo"/>
             </div>
+            {!collapse && 
             <div className='admin-name'>
-               Hi,  Nikhil
+               SmartWalk ID
             </div>
+            }
         </div>
-        <hr className='admin-line' />
+      
+        
     </div>
   )
 }
