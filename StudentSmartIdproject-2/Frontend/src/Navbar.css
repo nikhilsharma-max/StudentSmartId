@@ -1,10 +1,13 @@
 .navbar{
     height: 8vh;
+    width: 100%;
     border-radius: 10px 10px 0 0;
     background-color: #fff;
     display: flex;
     align-items: center;
     justify-content: space-between;
+    position: fixed;
+    border-bottom: 1px solid #E2E8F0;
 }
 .school-name{
     margin-left: 1.5rem;

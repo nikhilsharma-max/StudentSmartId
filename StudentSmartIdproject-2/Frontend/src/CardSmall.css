@@ -1,0 +1,43 @@
+.main-div-card{
+    height: 150px;
+    background-color: #FFFFFF;
+    margin: 2rem;
+    margin-right: 1rem;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    transition: all 0.3s ease;
+   
+}
+.card-header-dashboard{
+    display: flex;
+    font-size: large;
+    font-weight: 500;
+    justify-content: space-between;
+    margin: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.ellipsis-icon{
+    cursor: pointer;
+}
+.data{
+    display: flex;
+    font-size: xx-large;
+    font-weight: 600;
+    margin-left: 1rem;
+}
+
+.bottom-detail{
+    display: flex;
+    color: rgb(96, 96, 94);
+    margin: 10px;
+}
+.main-div-card:hover{
+    cursor: pointer;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+    border: 1px solid #e5e7eb;
+}

@@ -1,0 +1,23 @@
+.AttendancePieChart-main{
+    height: 400px;
+    margin: 10px;
+    /* margin-left: 2rem; */
+    border-radius: 10px;
+    background: white;
+    padding: 1.5rem;
+    border-radius: 16px;
+    box-shadow:0 4px 12px rgba(0,0,0,0.05);
+    transition: all 0.3s ease;
+    height: 22rem;
+}
+
+.AttendancePieChart-heading{
+    font-size: large;
+    font-weight: 600;
+}
+.AttendancePieChart-main:hover{
+    cursor: pointer;
+    transform: translateY(-1px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+    border: 1px solid #e5e7eb;
+}
