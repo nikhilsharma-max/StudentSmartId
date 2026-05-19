@@ -1,11 +1,18 @@
 import React from 'react'
 import './RecentActivity.css'
+import {CircleDotDashed} from 'lucide-react';
 
 const RecentActivity = () => {
   return (
     <div className='RecentActivity-main-div'>
-        <table>
-            <thead>
+        <div className='RecentActivity-heading'>
+            
+            <p> 🟢  Live Updates</p> 
+        </div>
+      <div className='RecentActivity-main-table'>
+
+        <table className='RecentActivity-table'>
+            <thead >
                 <tr>
                     <th>Student</th>
                     <th>Class</th>
@@ -46,6 +53,7 @@ const RecentActivity = () => {
                 </tr>
             </tbody>
         </table>
+      </div>
     </div>
   )
 }

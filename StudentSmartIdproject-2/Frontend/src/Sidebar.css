@@ -8,7 +8,8 @@
     margin-bottom: auto;
     transition: all 0.3s ease;
     position: static;
-    border-right: 1px solid #E2E8F0;
+    border-right: 1px solid #E2E8F0;    
+    flex-shrink: 0;
 }
 
 .main-div-collapse{

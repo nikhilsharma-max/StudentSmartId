@@ -1,3 +1,5 @@
 .admin-page{
-    display: flex;
+height: 100vh;
+display: flex;
+overflow: hidden;
 }

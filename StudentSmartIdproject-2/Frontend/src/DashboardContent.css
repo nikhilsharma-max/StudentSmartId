@@ -6,7 +6,8 @@
     background-color: #F1F5F9;
     margin: 5px;
     border-radius: 10px;
-    
+    flex: 1;
+    overflow-y: auto;
 }
 
 .top-section-card{
@@ -18,7 +19,7 @@
 .section-two-chart{
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    margin-top: 8vh;  
+   
 }
 .RecentActivity{
     margin-right: 1rem;
