@@ -1,15 +1,14 @@
 import React from 'react'
-import Sidebar from './Sidebar'
 import './AdminPage.css'
-import DashboardContent from './DashboardContent'
-import Navbar from './Navbar'
 import Dashboard from './Dashboard'
+import StudentPage from './StudentPage'
 
 const Admin = () => {
   return (
     
     <div >
-      <Dashboard/>
+      {/* <Dashboard/> */}
+      <StudentPage/>
     </div>
   )
 }

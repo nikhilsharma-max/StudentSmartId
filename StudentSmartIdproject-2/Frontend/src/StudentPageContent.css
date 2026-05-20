@@ -1,0 +1,49 @@
+.StudentPageContent{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    background-color: #F1F5F9;
+    margin: 5px;
+    border-radius: 10px;
+    flex: 1;
+    overflow-y: auto;
+}
+
+.students-header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 5px;
+    margin-top: 9vh;
+    border-radius: 10px;
+    background-color: rgb(236, 236, 247);
+flex-wrap: wrap;
+gap: 1rem;
+}
+
+.students-header-left p{
+    font-size: x-large;
+    font-weight: 600;
+    margin: 10px;
+    margin-bottom: 5px;
+}
+.students-header-left h1{
+    font-size: large;
+    font-weight: 600;
+    margin: 10px;
+    margin-top: 5px;
+}
+.students-header-right{
+    /* background-color: rgb(88, 198, 198); */
+   
+    border-radius: 10px;
+    margin: 5px;
+    display: flex;
+gap: 0.8rem;
+flex-wrap: wrap;
+}
+
+.student-record-table{
+    margin-right: 1rem;
+    /* background-color: aqua; */
+}

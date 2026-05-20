@@ -10,11 +10,10 @@ import { UserCheck } from 'lucide-react';
 import { UserRoundX } from 'lucide-react';
 import { ClockAlert } from 'lucide-react';
 
+
 const DashboardContent = () => {
   return (
-
-    
-    <div className='Dashboard' >
+    <div className='Dashboard'>
         <Navbar/>
         <div className='top-section-card'>
           <CardSmall heading="Total Students" data={1200} detail="Number of registered students 1200" icon={User} />
@@ -29,7 +28,6 @@ const DashboardContent = () => {
         <div className='RecentActivity'>
           <RecentActivity/>
         </div>
-
     </div>
   )
 }
