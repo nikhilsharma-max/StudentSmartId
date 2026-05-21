@@ -17,8 +17,8 @@
     margin-top: 9vh;
     border-radius: 10px;
     background-color: rgb(236, 236, 247);
-flex-wrap: wrap;
-gap: 1rem;
+    flex-wrap: wrap;
+    gap: 1rem;
 }
 
 .students-header-left p{
@@ -39,8 +39,8 @@ gap: 1rem;
     border-radius: 10px;
     margin: 5px;
     display: flex;
-gap: 0.8rem;
-flex-wrap: wrap;
+    gap: 0.8rem;
+    flex-wrap: wrap;
 }
 
 .student-record-table{

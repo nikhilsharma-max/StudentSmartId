@@ -23,9 +23,7 @@ select{
     margin: 5px;
     cursor: pointer;
 }
-.header-button:hover{
-    background-color: #e4e9ee;
-}
+
 .form-items{
     display: flex;
 gap: 0.8rem;
