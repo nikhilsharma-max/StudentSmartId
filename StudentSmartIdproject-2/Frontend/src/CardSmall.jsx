@@ -1,6 +1,4 @@
-
 import './CardSmall.css'
-import { Ellipsis } from 'lucide-react';
 
 export function CardSmall({heading,data,detail,icon}) {
   let Icon = icon

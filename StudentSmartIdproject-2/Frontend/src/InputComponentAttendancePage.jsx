@@ -1,19 +1,8 @@
 import React, { useState } from 'react'
 import './InputComponentAttendancePage.css'
 
-const InputComponentAttendancePage = () => {
-    let [fullName,setFullName] = useState("");
-    let [selectedClass,setSelectedClass] = useState("");
-    let [selectedStatus,setSelectedStatus] = useState("");
-    let handleNameChange = (event) =>{
-        setFullName(event.target.value);
-    }
-    let selectClass = (event) =>{
-        setSelectedClass(event.target.value);
-    }
-    let selectStatus = (event) =>{
-        setSelectedStatus(event.target.value);
-    }
+const InputComponentAttendancePage = ({fullName,selectedClass,selectedStatus,selectedDate,markAllPresent,handleNameChange,selectClass,selectStatus,handleDateChange}) => {
+
   return (
     <div>
     <form action="">
@@ -52,14 +41,19 @@ const InputComponentAttendancePage = () => {
         </select>
        </div>
        <div className='input-div'>
-        <input className='student-name-input' type="date"/>
+        <input value={selectedDate} onChange={handleDateChange} className='student-name-input' type="date"/>
        </div>
         </div>
-        <button type='button' className='header-button'>Mark All Present</button>
-        <button type='button' className='header-button'>+ Add Student</button> 
+        <button type='button' className='header-button' onClick={markAllPresent}>Mark All Present</button>
+        <button type='button' className='header-button'>Add Student</button>
+        {/* redirect to report page */}
+        <button type='button' className='header-button'>Check Report</button> 
+        <button type='button' className='date-button'>Student Records of {selectedDate}</button>
         </div>
+        
          
     </form>
+   
     </div>
   )
 }

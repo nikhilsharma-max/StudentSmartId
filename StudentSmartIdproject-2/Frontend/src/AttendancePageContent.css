@@ -57,6 +57,7 @@
     justify-content: space-between;
     align-items: center;
     margin: 5px;
+    margin-top: 2vh;
     border-radius: 10px;
     background-color: rgb(236, 236, 247);
     flex-wrap: wrap;
@@ -76,4 +77,22 @@
 .Attendance-filter p{
     font-size: large;
     font-weight: 600;
+}
+.attendance-card{
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.5rem;
+    /* margin-top: 1vh; */
+}
+
+.save-attendance-button{
+    background-color: aliceblue;
+    cursor: pointer;
+    border: 2px solid black;
+    padding: 2px;
+    border-radius: 5px;
+    margin-left: 1vh;
+}
+.save-attendance-button:hover{
+    background-color: #fdfdfd;
 }
