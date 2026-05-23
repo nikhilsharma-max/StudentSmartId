@@ -1,0 +1,30 @@
+.edit-student-button{
+   background-color:#fee2e2;
+   color:#991b1b;
+   padding:0.3rem 0.7rem;
+   border-radius:999px;
+   font-size:0.85rem;
+   font-weight:600;
+   cursor: pointer;
+}
+.row-one-details{
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1rem;
+}
+.AttendanceSummary{
+    background-color: rgb(236, 236, 247);
+    display: flex;
+    margin: 10px;
+    justify-content: center;
+    flex-direction: column;
+    border-radius: 10px;
+    padding: 10px;
+}
+.weeklyreport-viewpage{
+    width: 100%;
+}
+.parent-info-and-chart{
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
