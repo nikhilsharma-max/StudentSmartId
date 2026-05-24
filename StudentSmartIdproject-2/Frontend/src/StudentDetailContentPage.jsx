@@ -10,6 +10,44 @@ import { ClockAlert } from 'lucide-react';
 import PersonalInfoCard from './PersonalInfoCard';
 import ParentInfo from './ParentInfo';
 import WeeklyBarChart from './components/Charts/WeeklyBarChart';
+import HeatMap from './components/Charts/HeatMap';
+const attendanceData = [
+  { day: 1, status: "Present" },
+  { day: 2, status: "Present" },
+  { day: 3, status: "Late" },
+  { day: 4, status: "Present" },
+  { day: 5, status: "Present" },
+  { day: 6, status: "Present" },
+  { day: 7, status: "Absent" },
+
+  { day: 8, status: "Present" },
+  { day: 9, status: "Late" },
+  { day: 10, status: "Present" },
+  { day: 11, status: "Present" },
+  { day: 12, status: "Present" },
+  { day: 13, status: "Absent" },
+  { day: 14, status: "Absent" },
+
+  { day: 15, status: "Present" },
+  { day: 16, status: "Present" },
+  { day: 17, status: "Late" },
+  { day: 18, status: "Present" },
+  { day: 19, status: "Present" },
+  { day: 20, status: "Present" },
+  { day: 21, status: "Absent" },
+
+  { day: 22, status: "Present" },
+  { day: 23, status: "Present" },
+  { day: 24, status: "Present" },
+  { day: 25, status: "Late" },
+  { day: 26, status: "Present" },
+  { day: 27, status: "Present" },
+  { day: 28, status: "Absent" },
+
+  { day: 29, status: "Absent" },
+  { day: 30, status: "Present" },
+  { day: 31, status: "Absent" },
+];
 
 const StudentDetailContentPage = () => {
           let present = 198;
@@ -49,8 +87,9 @@ const StudentDetailContentPage = () => {
         <div className='parent-info-div'>
           <ParentInfo/>
         </div>
-        <div>
-          <WeeklyBarChart className='weeklyreport-viewpage'/>
+        <div className='parent-info-div'>
+          <p>Attendace heatmap</p>
+          <HeatMap attendanceData={attendanceData}/>
         </div>
       </div>
     </div>

@@ -6,7 +6,6 @@ const parentInfo = ({student}) => {
     <div>
         <div className='personalinfo-card-main-div'>
           <p className='profile-name'>Parent Info</p>
-          <div className='parent-info-container'>
             
             <div>
             <p><b>Mother's name</b></p>
@@ -27,8 +26,6 @@ const parentInfo = ({student}) => {
             <p><b>Father's Email :</b> Dayanand123sharma@gmail.com</p>
             </div>
           </div>
-
-        </div>
     </div>
   )
 }

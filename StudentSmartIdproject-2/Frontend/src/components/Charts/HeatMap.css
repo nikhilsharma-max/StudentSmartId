@@ -1,0 +1,28 @@
+.heatmap {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 8px;
+}
+.day-box {
+  aspect-ratio: 1;
+  border-radius: 8px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.present {
+  background: #22c55e;
+}
+
+.late {
+  background: #facc15;
+}
+
+.absent {
+  background: #ef4444;
+}
