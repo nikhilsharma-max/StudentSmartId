@@ -1,0 +1,7 @@
+.section-info-div{
+    background-color: rgb(239, 242, 242);
+    border-radius: 10px;
+    padding: 5px;
+    margin-bottom: 15px;
+    cursor: pointer;
+}
