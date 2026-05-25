@@ -2,6 +2,8 @@ import React,{useState} from 'react'
 import './Sidebar.css'
 import SidebarItem from './SidebarItem'
 import Sidebarlogo from './Sidebarlogo';
+import {Link,NavLink} from 'react-router-dom'
+import { useLocation } from "react-router-dom";
 
 import { LogOut,PanelRight,Settings,FileText,Bell,Users,ClipboardList,GraduationCap,LayoutDashboard } from 'lucide-react';
 
@@ -9,6 +11,8 @@ import { LogOut,PanelRight,Settings,FileText,Bell,Users,ClipboardList,Graduation
 const Sidebar = () => {
     let [activeItem,setActiveItem] = useState("Dashboard");
     let [collapse,setCollapse] = useState(false);
+    const location = useLocation();
+    console.log(location.pathname);
     let setCollapseState = ()=>{
         setCollapse(!collapse);
         console.log("Collapse state ",collapse);
@@ -26,16 +30,43 @@ const Sidebar = () => {
         
         <hr />
         <div className='main-option' >
-            <SidebarItem icon = {LayoutDashboard} label="Dashboard" isActive={activeItem === "Dashboard"} collapse={collapse} onClick={() => setActiveItem("Dashboard")  }  ></SidebarItem>
-            <SidebarItem icon = {GraduationCap} label="Student" isActive={activeItem === "Student"} collapse={collapse} onClick={() => setActiveItem("Student")}  ></SidebarItem>
-            <SidebarItem icon = {ClipboardList} label="Attendance" isActive={activeItem === "Attendance"} collapse={collapse} onClick={() => setActiveItem("Attendance")}  ></SidebarItem>
-            <SidebarItem icon = {Users} label="Classes" isActive={activeItem === "Classes"} collapse={collapse} onClick={() => setActiveItem("Classes")}  ></SidebarItem>
-            <SidebarItem icon = {Bell} label="Notification" isActive={activeItem === "Notification"} collapse={collapse} onClick={() => setActiveItem("Notification")}  ></SidebarItem>
-            <SidebarItem icon = {FileText} label="Report" isActive={activeItem === "Report"} collapse={collapse} onClick={() => setActiveItem("Report")}  ></SidebarItem>
+            <NavLink to="/dashboard">
+                <SidebarItem icon = {LayoutDashboard} label="Dashboard" isActive={location.pathname === "/dashboard"} collapse={collapse}></SidebarItem>
+            </NavLink>
+
+            <NavLink to="/student">
+                <SidebarItem icon = {GraduationCap} label="Student" isActive={location.pathname === "/student"} collapse={collapse}  ></SidebarItem>
+            </NavLink>
+
+            <NavLink to="/attendance">
+                <SidebarItem icon = {ClipboardList} label="Attendance" isActive={location.pathname === "/attendance"} collapse={collapse}></SidebarItem>
+            </NavLink>
+
+            <NavLink to="/classes">
+                <SidebarItem icon = {Users} label="Classes" isActive={location.pathname === "/classes"} collapse={collapse}></SidebarItem>
+            </NavLink>
+            <NavLink to="/notification">
+                <SidebarItem icon = {Bell} label="Notification" isActive={location.pathname === "/notification"} collapse={collapse} ></SidebarItem>
+            </NavLink>
+            <NavLink to="/report">
+                <SidebarItem icon = {FileText} label="Report" isActive={location.pathname === "/report"} collapse={collapse}></SidebarItem>
+            </NavLink>
+    
+            
+            
+            
+            
+            
         </div>
         <div className='bottom-section'>
-            <SidebarItem icon = {Settings} label="Setting" isActive={activeItem === "Setting"} collapse={collapse} onClick={() => setActiveItem("Setting")}  ></SidebarItem>
-            <SidebarItem icon = {LogOut} label="Logout" isActive={activeItem === "Logout"} collapse={collapse} onClick={() => setActiveItem("Logout")}  ></SidebarItem>
+            <NavLink to="/settings">
+                <SidebarItem icon = {Settings} label="Setting" isActive={location.pathname === "/settings"} collapse={collapse}></SidebarItem>
+            </NavLink>
+            <NavLink to="/logout">
+                <SidebarItem icon = {LogOut} label="Logout" isActive={location.pathname === "/logout"} collapse={collapse} ></SidebarItem>
+            </NavLink>  
+            
+            
         </div>
 
     </div>

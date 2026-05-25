@@ -4,6 +4,7 @@ import './StudentPageContent.css'
 import InputComponent from './InputComponent'
 import StudentRecordTable from './StudentRecordTable'
 import { useState } from 'react'
+import { Outlet } from 'react-router-dom'
 
 const students = [
   {
@@ -67,7 +68,6 @@ const StudentPageContent = () => {
         <div className='student-record-table'>
             <StudentRecordTable students={filteredStudents}/>
         </div>
-
     </div>
   )
 }

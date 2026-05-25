@@ -1,7 +1,7 @@
 import React from 'react'
 import './StudentRecordTable.css'
 import { Eye } from 'lucide-react';
-
+import { NavLink } from 'react-router-dom';
 const StudentRecordTable = ({ students }) => {
   return (
     <div className='Search-student-main-div'>
@@ -42,7 +42,9 @@ const StudentRecordTable = ({ students }) => {
                     </span>
                   </td>
                   <td>
-                    <button className='action-button'>View <Eye className='eye-icon' /></button>
+                    <NavLink to={`${student.id}`}>
+                      <button className='action-button'>View <Eye className='eye-icon' /></button>
+                    </NavLink>
                   </td>
                 </tr>
               ))

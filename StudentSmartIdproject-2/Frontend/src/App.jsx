@@ -1,11 +1,13 @@
 import React from 'react'
-import Admin from './Admin'
+import Sidebar from './Sidebar'
+import { Outlet } from 'react-router-dom'
+
 const App = () => {
   return (
-    <div>
-      <Admin></Admin>
+    <div className='admin-page'>
+      <Sidebar/>
+      <Outlet/>
     </div>
-    
   )
 }
 

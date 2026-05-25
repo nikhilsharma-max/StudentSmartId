@@ -11,6 +11,7 @@ import PersonalInfoCard from './PersonalInfoCard';
 import ParentInfo from './ParentInfo';
 import WeeklyBarChart from './components/Charts/WeeklyBarChart';
 import HeatMap from './components/Charts/HeatMap';
+import { useParams } from 'react-router-dom';
 const attendanceData = [
   { day: 1, status: "Present" },
   { day: 2, status: "Present" },
@@ -50,6 +51,7 @@ const attendanceData = [
 ];
 
 const StudentDetailContentPage = () => {
+          let {id} = useParams();
           let present = 198;
           let absent = 26;
           let late = 13
@@ -70,7 +72,7 @@ const StudentDetailContentPage = () => {
 
       {/* Row one  Profile card and attendance summary */}
       <div className='row-one-details'>
-        <ProfileCard/>
+        <ProfileCard id={id}/>
         <div className='AttendanceSummary'>
           <CardSmall heading="Attendance %" data={((present)/(present+absent)*(100)).toFixed(2)} detail="Total attendance %" icon={ShieldCheck} />
           <CardSmall heading="Present Days" data={present} detail="Days present in school" icon={UserCheck} />
