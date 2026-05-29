@@ -5,7 +5,7 @@ const ProfileCard = ({id}) => {
   return (
    
         <div className='profile-card-main-div'>
-            <img className='profile-picture' src="./user-image.png" alt="Profile" />
+            <img className='profile-picture' src="/user-nikhil.png" alt="Profile" />
             <p className='profile-name'>Nikhil Sharma</p>
             <p>Roll no.  {id}</p>
             <p>Class  XII</p>
