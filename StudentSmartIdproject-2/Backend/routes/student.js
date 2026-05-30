@@ -4,12 +4,15 @@ const express = require("express");
 const router = express.Router();
 const studentController = require("../controllers/student.js");
 
+
 router.get("",studentController.getStudent);
+router.get("/:id",studentController.findStudentById);
 
 
+router.post("",studentController.postStudent);
 
-router.get("/:id",(req,res)=>{
-    res.send("Id pr request aayi h");
-})
+router.patch("/:id",studentController.updateStudentById);
+
+router.delete("/:id",studentController.deleteStudentById);
 
 module.exports = router;
