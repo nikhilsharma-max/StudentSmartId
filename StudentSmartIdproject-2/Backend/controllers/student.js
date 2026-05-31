@@ -3,10 +3,18 @@ const {studentSchema,Student} = require("../models/Student.js");
 
 module.exports.getStudent = async (req, res) => {
     try {
-        let data = await Student.find();
-        
-        console.log("received request");
-        res.json(data);
+        let data = await Student.find().populate("classId");
+        if(!data){
+            return res.status(404).json({
+                success:false,
+                message:"No data found"
+            })
+        }
+        return res.status(200).json({
+            success:true,
+            message:"Sucessfully get student data",
+            data,
+        })
     } catch (err) {
         console.log(err);
         res.status(500).send("Error fetching students");
@@ -42,7 +50,7 @@ module.exports.findStudentById = async(req,res)=>{
                 message:"Id not get"
             })
         }
-        const student = await Student.findById(id);
+        const student = await Student.findById(id).populate("classId");
         if(!student){
             return res.status(500).json({
                 success:false,
@@ -71,7 +79,7 @@ try {
             message:"Id not provided"
         })
     }
-    let deletedStudent = await Student.findByIdAndDelete(id);
+    let deletedStudent = await Student.findByIdAndDelete(id).populate("classId");
     if(!deletedStudent){
         return res.status(404).json({
             success:false,

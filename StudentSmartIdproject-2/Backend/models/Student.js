@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const {Schema} = mongoose;
+const {Classes} = require("./Classes.js");
 
 const studentSchema = new mongoose.Schema(
 {
@@ -46,7 +47,7 @@ const studentSchema = new mongoose.Schema(
     classId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Class",
-        // required: true
+        required: true
     },
 
     section: {
