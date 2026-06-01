@@ -145,3 +145,100 @@ try {
     })
 }
 }
+
+module.exports.getSummary = async(req,res)=>{
+    let {id} = req.params;
+    const { from, to } = req.query;
+    try {
+        if(from===undefined || to === undefined){
+            if(!id){
+                return res.status(400).json({
+                    success:false,
+                    message:"Id not provided"
+                })
+            }
+            let attendanceRecord = await Attendance.find({"studentId":id}).populate("studentId");
+            if(!attendanceRecord || attendanceRecord.length === 0){
+                return res.status(404).json({
+                    success:false,
+                    message:"No data found",
+                })
+            }
+            let lateCount = 0;
+            let presentCount = 0;
+            let absentCount = 0;
+            for(let i = 0;i<attendanceRecord.length;i++){
+                let currData = attendanceRecord[i];
+                if(currData.status==="Late")lateCount++;
+                if(currData.status==="Present")presentCount++;
+                if(currData.status==="Absent")absentCount++;
+            }
+            let totalDays = 365;// Fetch from school info 
+            return res.status(200).json({
+                success:true,
+                message:{
+                    lateCount,
+                    presentCount,
+                    absentCount,
+                }
+            })
+        }else{
+            if(!id){
+                return res.status(400).json({
+                    success:false,
+                    message:"Id not provided"
+                })
+            }
+            if(from>to){
+                return res.status(400).json({
+                    success:true,
+                    message:"Invalid date range"
+                })
+            }
+            let filter = {
+                studentId: id
+            };
+            if (from && to) {
+                filter.date = {
+                    $gte: new Date(from),
+                    $lte: new Date(to)
+                };
+            }
+            const attendanceRecord = await Attendance.find(filter);
+            if(!attendanceRecord || attendanceRecord.length === 0){
+                return res.status(404).json({
+                    success:false,
+                    message:"No data found",
+                })
+            }
+            let lateCount = 0;
+            let presentCount = 0;
+            let absentCount = 0;
+            for(let i = 0;i<attendanceRecord.length;i++){
+                let currData = attendanceRecord[i];
+                if(currData.status==="Late")lateCount++;
+                if(currData.status==="Present")presentCount++;
+                if(currData.status==="Absent")absentCount++;
+            }
+            let totalDays = presentCount+absentCount+lateCount;
+            let attendancePercent = +((100*(presentCount+lateCount)/(totalDays)).toFixed(2));
+            return res.status(200).json({
+                success:true,
+                message:{
+                    from,
+                    to,
+                    lateCount,
+                    presentCount,
+                    absentCount,
+                    totalDays,
+                    attendancePercent
+                }
+            })
+        }
+    } catch (error) {
+        return res.status(500).json({
+            success:false,
+            message:"Something went wrong"
+        })
+    }
+}

@@ -3,6 +3,8 @@ const mongoose = require("mongoose");
 const StudentRouter = require("./routes/student.js");
 const ClassesRouter = require("./routes/classes.js");
 const AttendaceRouter = require("./routes/attendance.js");
+const TeacherRouter = require("./routes/teacher.js");
+const ActivatingRouter = require("./routes/activitylog.js");
 require("dotenv").config();
 const app = express();
 app.use(express.json());
@@ -31,7 +33,8 @@ main();
 app.use("/student",StudentRouter);
 app.use("/classes",ClassesRouter);
 app.use("/attendance",AttendaceRouter);
-
+app.use("/teacher",TeacherRouter);
+app.use("/activitylog",ActivatingRouter);
 
 
 
