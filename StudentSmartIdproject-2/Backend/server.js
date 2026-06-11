@@ -8,6 +8,7 @@ const ActivatingRouter = require("./routes/activitylog.js");
 const SchoolSettingRouter = require("./routes/schoolsetting.js");
 const userRouter = require("./routes/user.js");
 const { User } = require("./models/User.js");
+const cookieParser = require('cookie-parser');
 require("dotenv").config();
 const app = express();
 app.use(express.json());
@@ -39,6 +40,7 @@ app.get("/ping", (req,res)=>{
     console.log("PING HIT");
     res.send("pong");
 });
+app.use(cookieParser());
 //Creating routes
 app.use("/student",StudentRouter);
 app.use("/classes",ClassesRouter);

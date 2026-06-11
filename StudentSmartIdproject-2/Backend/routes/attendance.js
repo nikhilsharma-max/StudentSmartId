@@ -2,8 +2,8 @@ const express = require("express");
 const router = express.Router();
 const AttendanceController = require("../controllers/Attendance.js");
 const { Attendance } = require("../models/Attendace.js");
-
-
+const {authMiddleware} = require("../middleware/authMiddleware.js");
+router.use(authMiddleware);
 
 router.post("",AttendanceController.postAttendanceData);
 router.get("",AttendanceController.getAllAttendaceRecord);

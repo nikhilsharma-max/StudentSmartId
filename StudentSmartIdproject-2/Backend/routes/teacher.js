@@ -2,7 +2,9 @@ const express = require("express");
 const router = express.Router();
 const teacherController = require("../controllers/Teacher.js");
 const { Teacher } = require("../models/Teachers.js");
+const {authMiddleware} = require("../middleware/authMiddleware.js");
 
+router.use(authMiddleware);
 
 router.post("",teacherController.postTeacherData);
 router.get("",teacherController.getAllTeacher);
