@@ -175,7 +175,7 @@ module.exports.login = async(req,res)=>{
         // Refreshtoken and session dono save hone ke baad response bhejna hai
         //Creating access token
         const accessToken = jwt.sign(
-            { userId: user._id,sessionId: session._id, username: user.username},
+            { userId: user._id,sessionId: session._id, username: user.username,role: user.role },
             jwtSecretKey,
             { expiresIn: '15m' }
         );
@@ -236,7 +236,7 @@ module.exports.refreshRoute = async(req,res)=>{
         }
         //Creating new access token
         const accessToken = jwt.sign(
-            { userId: user._id, sessionId: session._id, username: user.username },
+            { userId: user._id, sessionId: session._id, username: user.username, role: user.role },
             jwtSecretKey,
             { expiresIn: '15m' }
         );
@@ -262,8 +262,11 @@ module.exports.logout = async(req,res)=>{
                 .update(refreshToken)
                 .digest("hex");
             await Session.findOneAndUpdate(
-                {refreshTokenHash},
-                {revoked: true}
+                { refreshTokenHash },
+                {
+                    revoked: true,
+                    revokedAt: new Date()
+                }
             );
             res.clearCookie("refreshToken");
         }
@@ -279,4 +282,59 @@ module.exports.logout = async(req,res)=>{
         })
     }
 }
+
+module.exports.logoutAll = async(req,res)=>{
+    try {
+        const userId = req.user.userId;
+        await Session.updateMany(
+            { userId },
+            {
+                revoked: true,
+                revokedAt: new Date()
+            }
+        );
+        res.clearCookie("refreshToken");
+        return res.status(200).json({
+            success:true,
+            message:"Logged out from all devices successfully",
+        })
+    } catch (error) {
+        console.log("Error during logout from all devices:", error);
+        return res.status(500).json({
+            success:false,
+            message:"Something went wrong",
+        })
+    }
+}
+
+module.exports.getMe = async(req,res)=>{
+    const authHeader = req.headers.authorization;
+    if(!authHeader || !authHeader.startsWith("Bearer ")){
+        return res.status(401).json({
+            success:false,
+            message:"Unauthorized",
+        })
+    }
+    // console.log("Auth header received:", authHeader); // Debugging log
+    const token = authHeader.split(" ")[1];
+    try {
+        const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
+        if(!decoded){
+            return res.status(404).json({
+                success:false,
+                message:"Cannot find user"
+            });
+        }
+        return res.status(200).json({
+            success:true,
+            decoded
+        })
+    } catch (error) {
+        return res.status(401).json({
+            success:false,
+            message:"Invalid token",
+        })
+    }
+}
+
 

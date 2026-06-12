@@ -1,5 +1,6 @@
 // Controller callback to get sudents from database
 const {studentSchema,Student} = require("../models/Student.js");
+const { logActivity } = require("../Services/activityLogger.js");
 
 module.exports.getStudent = async (req, res) => {
     try {
@@ -26,6 +27,14 @@ module.exports.postStudent = async (req,res)=>{
     console.log(data);
 try {
     const students = await Student.insertMany(data);
+    if(!students){
+        return res.status(400).json({
+            success:false,
+            message:"Failed to add student",
+        })
+    }
+    
+    await logActivity(req.user.userId, "CREATE_STUDENT", "Student", students[0]._id, "Student record created", null, students[0]._id);
     res.status(201).json({
         success: true,
         students
@@ -39,7 +48,6 @@ catch(err){
     });
 }  
 }
-
 
 module.exports.findStudentById = async(req,res)=>{
     let {id} = req.params;
@@ -86,6 +94,7 @@ try {
             message:"No student found"
         })
     }
+    await logActivity(req.user.userId, "DELETE_STUDENT", "Student", deletedStudent._id, "Student record deleted",deletedStudent,null);
     res.status(200).json({
         success:true,
         message:"Student deleted successfully"
@@ -98,7 +107,6 @@ try {
     })
 }
 }
-
 
 module.exports.updateStudentById = async(req,res)=>{
     let {id} = req.params;
@@ -118,6 +126,7 @@ module.exports.updateStudentById = async(req,res)=>{
                     message:"Invalid data"
                 })
             }
+            const oldData = await Student.findById(id);
             let updatedStudent = await Student.findByIdAndUpdate(id,updateData,{ returnDocument: 'after',runValidators:true});
             if(!updatedStudent){
                 return res.status(400).json({
@@ -125,6 +134,8 @@ module.exports.updateStudentById = async(req,res)=>{
                     message:"Invalid update data",
                 })
             }
+            
+            await logActivity(req.user.userId, "UPDATE_STUDENT", "Student", updatedStudent._id, "Student record updated", oldData, updatedStudent);
             return res.status(200).json({
                 success:true,
                 message:"Student updated successfully",

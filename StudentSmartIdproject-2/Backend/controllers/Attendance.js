@@ -1,4 +1,5 @@
 const {Attendance,attendanceSchema} = require("../models/Attendace.js");
+const { logActivity } = require("../Services/activityLogger.js");
 
 module.exports.postAttendanceData = async(req,res)=>{
     let data = req.body;
@@ -16,6 +17,7 @@ module.exports.postAttendanceData = async(req,res)=>{
                 message:"Failed to add data",
             })
         }
+        await logActivity(req.user.userId, "CREATE_ATTENDANCE", "Attendance", createdData[0]._id, "Attendance record created",null,createdData);
         return res.status(201).json({
             success:true,
             message:"Succesfully added attendance data"
@@ -27,7 +29,6 @@ module.exports.postAttendanceData = async(req,res)=>{
         })
     }
 };
-
 
 module.exports.getAllAttendaceRecord = async(req,res)=>{
     try {
@@ -95,7 +96,7 @@ module.exports.updateAttendanceById = async(req,res)=>{
                 success:false,
                 message:"Invalid update data",
             })
-        }
+        }   const oldData = await Attendance.findById(id);
             let updatedData = await Attendance.findByIdAndUpdate(id,dataToUpdate,{ returnDocument: 'after',runValidators:true});
             if(Object.keys(updatedData).length === 0){
                 return res.status(404).json({
@@ -103,6 +104,7 @@ module.exports.updateAttendanceById = async(req,res)=>{
                     message:"Failed to update data"
                 })
             }
+            await logActivity(req.user.userId, "UPDATE_ATTENDANCE", "Attendance", updatedData._id, "Attendance record updated", oldData, updatedData);
             return res.status(200).json({
                 success:true,
                 message:"Updated successfully",
@@ -132,6 +134,7 @@ try {
             message:"No data found"
         })
     }
+    await logActivity(req.user.userId, "DELETE_ATTENDANCE", "Attendance", deleteddata._id, "Attendance record deleted",deleteddata,null);
     res.status(200).json({
         success:true,
         message:"Data deleted successfully",

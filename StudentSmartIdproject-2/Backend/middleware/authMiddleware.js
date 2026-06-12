@@ -2,6 +2,7 @@ const dotenv = require("dotenv");
 const jwt = require("jsonwebtoken");
 const { Session } = require("../models/Session.js");
 dotenv.config();
+
 module.exports.authMiddleware = async(req,res,next)=>{
     const authHeader = req.headers.authorization;
     if(!authHeader || !authHeader.startsWith("Bearer ")){

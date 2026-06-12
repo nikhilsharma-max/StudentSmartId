@@ -1,4 +1,6 @@
 const {teacherSchema,Teacher} = require("../models/Teachers.js");
+const { logActivity } = require("../Services/activityLogger.js");
+
 
 module.exports.postTeacherData = async(req,res)=>{
     try {
@@ -16,6 +18,7 @@ module.exports.postTeacherData = async(req,res)=>{
                 message:"Cannot add data",
             })
         }
+        await logActivity(req.user.userId, "CREATE_TEACHER", "Teacher", addedData[0]._id, "Teacher record created",null,addedData[0]._id);  
         return res.status(201).json({
             success:true,
             message:"Data added succesfully"
@@ -97,6 +100,7 @@ module.exports.updateTeacherById = async(req,res)=>{
                     message:"Invalid data"
                 })
             }
+            const oldData = await Teacher.findById(id);
             let updatedTeacher = await Teacher.findByIdAndUpdate(id,updateData,{ returnDocument: 'after',runValidators:true});
             if(!updatedTeacher){
                 return res.status(400).json({
@@ -104,10 +108,11 @@ module.exports.updateTeacherById = async(req,res)=>{
                     message:"Invalid update data",
                 })
             }
+            await logActivity(req.user.userId, "UPDATE_TEACHER", "Teacher", updatedTeacher._id, "Teacher record updated", oldData, updatedTeacher);
             return res.status(200).json({
                 success:true,
                 message:"Teacher updated successfully",
-                student: updatedTeacher
+                teacher: updatedTeacher
             })
         }catch(err){
             console.log(err);
@@ -140,6 +145,7 @@ module.exports.deleteById = async(req,res)=>{
                 message:"Data cannot be deleted",
             });
         }
+        await logActivity(req.user.userId, "DELETE_TEACHER", "Teacher", deletedData._id, "Teacher record deleted",deletedData,null);
         return res.status(200).json({
             success:true,
             message:"Deleted successfully",

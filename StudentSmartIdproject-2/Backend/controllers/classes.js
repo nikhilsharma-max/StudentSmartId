@@ -1,5 +1,5 @@
 const {Classes,classSchema} = require("../models/Classes.js");
-
+const { logActivity } = require("../Services/activityLogger.js");
 
 module.exports.postClasses = async(req,res)=>{
     let data = req.body;
@@ -12,6 +12,7 @@ module.exports.postClasses = async(req,res)=>{
                 message:"Failed to add classes",
             })
         }
+        await logActivity(req.user.userId, "CREATE_CLASS", "Classes", classes[0]._id, "Class record created",null,classes);
         return res.status(201).json({
             success:true,
             message:"Added data succesfully",
@@ -47,7 +48,6 @@ module.exports.getClasses = async(req,res)=>{
     }
 }
 
-
 module.exports.getClassById = async(req,res)=>{
     let {id} = req.params;
     try {
@@ -77,7 +77,6 @@ module.exports.getClassById = async(req,res)=>{
     }
 }
 
-
 module.exports.updateClassById = async(req,res)=>{
     let {id} = req.params;
     try {
@@ -96,6 +95,7 @@ module.exports.updateClassById = async(req,res)=>{
                     message:"Invalid data"
                 })
             }
+            const oldData = await Classes.findById(id);
             let updatedClass = await Classes.findByIdAndUpdate(id,updateData,{ returnDocument: 'after',runValidators:true});
             if(!updatedClass){
                 return res.status(400).json({
@@ -103,6 +103,7 @@ module.exports.updateClassById = async(req,res)=>{
                     message:"Invalid update data",
                 })
             }
+            await logActivity(req.user.userId, "UPDATE_CLASS", "Classes", updatedClass._id, "Class record updated", null, updatedClass);
             return res.status(200).json({
                 success:true,
                 message:"Class updated successfully",
@@ -132,6 +133,7 @@ module.exports.deleteClassById = async(req,res)=>{
                 message:"Id not valid",
             })
         }
+        const oldData = await Classes.find(id);
         let deletedClass = await Classes.findByIdAndDelete(id);
         if(!deletedClass){
             return res.status(404).json({
@@ -139,6 +141,7 @@ module.exports.deleteClassById = async(req,res)=>{
                 message:"Class not found",
             })
         }
+        await logActivity(req.user.userId, "DELETE_CLASS", "Classes", deletedClass._id, "Class record deleted",oldData,null);   
         return res.status(200).json({
             success:true,
             message:"Class deleted successfully",

@@ -3,7 +3,7 @@ const {Schema} = mongoose;
 
 const activityLogSchema = new mongoose.Schema({
 
-    teacherId: {
+    performedBy: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Teacher",
         required: true

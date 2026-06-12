@@ -1,4 +1,5 @@
 const { SchoolSettings,schoolSettingsSchema} = require("../models/SchoolSetting.js");
+const { logActivity } = require("../Services/activityLogger.js");
 
 module.exports.postSchoolData = async(req,res)=>{
     console.log("Request aayi hai")
@@ -24,6 +25,7 @@ module.exports.postSchoolData = async(req,res)=>{
                 message:"Cannot insert data",
             })
         }
+        await logActivity(req.user.userId, "CREATE_SCHOOL", "SchoolSettings", insertedData[0]._id, "School record created",null,insertedData);
         return res.status(201).json({
             success:true,
             message:"School added successfully",
@@ -70,6 +72,7 @@ module.exports.updateSchoolData  = async(req,res)=>{
                     message:"Invalid data"
                 })
             }
+            // const oldData = await SchoolSettings.findById(id);
             let updatedSchool = await SchoolSettings.findOneAndUpdate({},updateData,{ returnDocument: 'after',runValidators:true});
             if(!updatedSchool){
                 return res.status(400).json({
@@ -77,10 +80,11 @@ module.exports.updateSchoolData  = async(req,res)=>{
                     message:"Invalid update data",
                 })
             }
+            await logActivity(req.user.userId, "UPDATE_SCHOOL", "SchoolSettings", updatedSchool._id, "School record updated", null, updatedSchool);
             return res.status(200).json({
                 success:true,
                 message:"School updated successfully",
-                student: updatedSchool
+                school: updatedSchool
             })
     } catch (error) {
         return res.status(500).json({
@@ -106,6 +110,7 @@ module.exports.deleteSchoolData = async(req,res)=>{
                 message:"Failed to delete",
             })
         }
+        await logActivity(req.user.userId, "DELETE_SCHOOL", "SchoolSettings", deletedData._id, "School record deleted",deletedData,null);
         return res.status(200).json({
             success:true,
             message:"Data deleted successfully",
