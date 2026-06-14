@@ -4,7 +4,6 @@ import './index.css'
 import App from './App.jsx'
 import React from 'react'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
-
 import DashboardContent from './DashboardContent'
 import StudentPageContent from './StudentPageContent' 
 import StudentPage from './StudentPage'
@@ -14,16 +13,38 @@ import ClassPage from './ClassPage/ClassPage'
 import AttendancePageContent from './AttendancePageContent'
 import ClassPageContent from './ClassPage/ClassPageContent'
 import StudentDetailContentPage from './StudentDetailContentPage'
+import SchoolRegister from './Authorization pages/SchoolRegister'
+import Login from './Authorization pages/Login'
+import VerifyEmail from './Authorization pages/VerifyEmail'
+import ProtectedRoute from './components/ProtectedRoute'
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const router = createBrowserRouter([
   {
+    path:"/verify-email",
+    element:<VerifyEmail/>
+  },
+{
+path:'',
+element:<Login/>
+},
+  {
+    path:"/login",
+    element:<Login/>
+  },
+  {
+    path:'/register',
+    element:<SchoolRegister/>
+  },
+  {
     path:'/',
-    element:<App/>,
+    element:(
+      <ProtectedRoute>
+        <App/>
+      </ProtectedRoute>
+      ),
     children:[
-      {
-        path:'',
-        element:<DashboardContent/>
-      },
       {
         path:'/dashboard',
         element:<DashboardContent/>
@@ -67,10 +88,16 @@ const router = createBrowserRouter([
       }
     ]
   }
+  
 ])
 
 createRoot(document.getElementById('root')).render(
-  <StrictMode>
+  <>
     <RouterProvider router={router} />
-  </StrictMode>,
+        <ToastContainer
+        position="bottom-right"
+        autoClose={3000}
+        theme="light"
+      />
+  </>
 )

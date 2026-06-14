@@ -9,10 +9,18 @@ const SchoolSettingRouter = require("./routes/schoolsetting.js");
 const userRouter = require("./routes/user.js");
 const { User } = require("./models/User.js");
 const cookieParser = require('cookie-parser');
+const cors = require("cors");
 require("dotenv").config();
 const app = express();
+app.use(
+  cors({
+    origin: "http://localhost:8080",
+    credentials: true
+  })
+);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
 //Activating listening port
 let port = process.env.PORT;
 app.listen(port,()=>{

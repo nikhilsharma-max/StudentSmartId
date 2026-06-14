@@ -11,7 +11,7 @@ module.exports.register = async(req,res)=>{
     
     try {
       
-        const {username,password,email,role} =req.body;
+        const {username,password,email,role="Admin"} =req.body;
         if(!username || !password || !email || !role){
             return res.status(400).json({
                 success:false,
@@ -60,7 +60,7 @@ module.exports.register = async(req,res)=>{
             })
         }
         //Send verification email with the original (unhashed) verification token
-        const verificationLink = `http://localhost:8000/auth/verify-email?token=${verificationToken}`;
+        const verificationLink = `http://localhost:8080/verify-email?token=${verificationToken}`;
         await sendEmail(email, "Email Verification", `Please click verify to verify your email: <a href="${verificationLink}">Verify Email</a> Link will expire in 10 minutes.`);   
         return res.status(201).json({
             "success": true,
@@ -118,14 +118,15 @@ module.exports.verify = async(req,res)=>{
 module.exports.login = async(req,res)=>{
      let jwtSecretKey = process.env.JWT_SECRET_KEY;
     try {
-        const {username,password} = req.body;
-        if(!username || !password){
+        const {email,password} = req.body;
+        if(!email || !password){
             return res.status(400).json({
                 success:false,
                 message:"All fields are required"
             });
         }
-        const user = await User.findOne({username});
+
+        const user = await User.findOne({email});
         if(!user){
             return res.status(404).json({
                 success:false,
