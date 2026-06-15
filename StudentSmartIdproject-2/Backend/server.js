@@ -7,6 +7,7 @@ const TeacherRouter = require("./routes/teacher.js");
 const ActivatingRouter = require("./routes/activitylog.js");
 const SchoolSettingRouter = require("./routes/schoolsetting.js");
 const userRouter = require("./routes/user.js");
+const dashboardRouter = require("./routes/dashboard.js");
 const { User } = require("./models/User.js");
 const cookieParser = require('cookie-parser');
 const cors = require("cors");
@@ -57,7 +58,6 @@ app.use("/teacher",TeacherRouter);
 app.use("/activitylog",ActivatingRouter);
 app.use("/schoolsetting",SchoolSettingRouter);
 app.use("/auth", userRouter);
-
-
+app.use("/dashboard",dashboardRouter);
 
 
