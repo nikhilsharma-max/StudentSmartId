@@ -11,7 +11,7 @@ const Sidebarlogo = ({collapse}) => {
             </div>
             {!collapse && 
             <div className='admin-name'>
-               SmartWalk ID
+               Welcome Nikhil
             </div>
             }
         </div>

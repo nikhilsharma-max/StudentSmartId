@@ -10,16 +10,16 @@ import {
   Legend
 } from 'recharts'
 
-const data = [
-  { name: "Present", value: 987 },
-  { name: "Absent", value: 213 },
-  { name: "Late", value: 19 }
-]
+
 
 const COLORS = ['#22c55e', '#ef4444', '#f59e0b']
 
-const AttendancePieChart = () => {
-
+const AttendancePieChart = ({present,absent,late}) => {
+const data = [
+  { name: "Present", value: present },
+  { name: "Absent", value: absent },
+  { name: "Late", value: late}
+]
   return (
 
     <div className='AttendancePieChart-main'>

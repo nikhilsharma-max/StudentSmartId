@@ -1,10 +1,10 @@
 import React from 'react'
 import './Navbar.css'
 import { Headset } from 'lucide-react';
-const Navbar = () => {
+const Navbar = ({SchoolName}) => {
   return (
     <div className='navbar'>
-        <p className='school-name' >School's name</p>
+        <p className='school-name' >{SchoolName}</p>
         <Headset className='support-icon' />
     </div>
   )

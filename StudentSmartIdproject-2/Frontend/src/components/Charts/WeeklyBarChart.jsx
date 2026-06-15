@@ -10,17 +10,18 @@ import {
   CartesianGrid
 } from 'recharts';
 
-const data = [
-  { name: 'Monday', Present: 1000 },
-  { name: 'Tuesday', Present: 1000 },
-  { name: 'Wed', Present: 900 },
-  { name: 'Thursday', Present: 780 },
-  { name: 'Friday', Present: 890 },
-  { name: 'Saturday', Present: 390 },
-  { name: 'Sunday', Present: 150 },
-];
 
-const WeeklyBarChart = () => {
+
+const WeeklyBarChart = ({weeklyData}) => {
+  const data = [
+  { name: 'Monday', Present: weeklyData[6].present },
+  { name: 'Tuesday', Present: weeklyData[0].present },
+  { name: 'Wed', Present: weeklyData[1].present },
+  { name: 'Thursday', Present: weeklyData[2].present },
+  { name: 'Friday', Present: weeklyData[3].present },
+  { name: 'Saturday', Present: weeklyData[4].present },
+  { name: 'Sunday', Present: weeklyData[5].present },
+];
   return (
     <div className='barchart-main-div'>
       

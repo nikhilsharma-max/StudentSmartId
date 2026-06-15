@@ -19,6 +19,7 @@ import VerifyEmail from './Authorization pages/VerifyEmail'
 import ProtectedRoute from './components/ProtectedRoute'
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Logout from './components/Logout'
 
 const router = createBrowserRouter([
   {
@@ -80,7 +81,7 @@ element:<Login/>
       },
       {
         path:'/logout',
-       element:<DashboardContent/>
+       element:<Logout/>
       },
       {
         path:'*',
