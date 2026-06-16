@@ -1,8 +1,7 @@
 import React from 'react'
 import './RecentActivity.css'
-import {CircleDotDashed} from 'lucide-react';
 
-const RecentActivity = () => {
+const RecentActivity = ({liveTableData}) => {
   return (
     <div className='RecentActivity-main-div'>
         <div className='RecentActivity-heading'>
@@ -21,36 +20,31 @@ const RecentActivity = () => {
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td>Nikhil</td>
-                    <td>10-A</td>
-                    <td>On time</td>
-                    <td>8:19</td>
-                </tr>
-                <tr>
-                    <td>Rahul</td>
-                    <td>10-B</td>
-                    <td>On time</td>
-                    <td>8:14</td>
-                </tr>
-                <tr>
-                    <td>Riya</td>
-                    <td>9-C</td>
-                    <td>Late</td>
-                    <td>8:32</td>
-                </tr>
-                <tr>
-                    <td>Amit</td>
-                    <td>11-D</td>
-                    <td>On time</td>
-                    <td>7:59</td>
-                </tr>
-                <tr>
-                    <td>Meena</td>
-                    <td>12-PCM</td>
-                    <td>Late</td>
-                    <td>8:39</td>
-                </tr>
+                {liveTableData?.length > 0 ? (
+                    liveTableData.map((item) => (
+                    <tr key={item._id}>
+                        <td>{item.studentId?.name}</td>
+
+                        <td>
+                        {item.studentId?.classId?.className}-
+                        {item.studentId?.classId?.section}
+                        </td>
+
+                        <td>{item.status}</td>
+
+                        <td>
+                        {new Date(item.entryTime).toLocaleTimeString([], {
+                            hour: "2-digit",
+                            minute: "2-digit",
+                        })}
+                        </td>
+                    </tr>
+                    ))
+                    ) : (
+                    <tr>
+                    <td colSpan="4">No recent attendance records found</td>
+                    </tr>
+                    )}
             </tbody>
         </table>
       </div>

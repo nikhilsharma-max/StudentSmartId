@@ -227,7 +227,7 @@ module.exports.getSummary = async(req,res)=>{
             let attendancePercent = +((100*(presentCount+lateCount)/(totalDays)).toFixed(2));
             return res.status(200).json({
                 success:true,
-                message:{
+                data:{
                     from,
                     to,
                     lateCount,

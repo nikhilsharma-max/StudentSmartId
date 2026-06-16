@@ -1,39 +1,39 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import Navbar from './Navbar'
 import './StudentPageContent.css'
 import InputComponent from './InputComponent'
 import StudentRecordTable from './StudentRecordTable'
 import { useState } from 'react'
-import { Outlet } from 'react-router-dom'
-
-const students = [
-  {
-    id: 1,
-    name: "Nikhil",
-    roll: 13,
-    class: "X",
-    status: "On time"
-  },
-
-  {
-    id: 2,
-    name: "Rahul",
-    roll: 25,
-    class: "IX",
-    status: "Late"
-  },
-
-  {
-    id: 3,
-    name: "Riya",
-    roll: 18,
-    class: "LKG",
-    status: "Absent"
-  }
-];
-
+import api from "../src/api/axios.js"
+import { toast } from 'react-toastify'
 
 const StudentPageContent = () => {
+const [students, setStudents] = useState([]);
+const [schoolName, setSchoolName] = useState("School's Name");
+
+useEffect(() => {
+  const getData = async () => {
+    try {
+      const response = await api.get("/student");
+      const response2 = await api.get("/schoolSetting");
+      setSchoolName(response2.data.data[0].schoolName);
+      const formattedStudents = response.data.data.map((student) => ({
+        id:student._id,
+        name: student.name,
+        class: student.classId?.className,
+        section:student.classId?.section,
+        status: student.status,
+        roll: student.rollNumber,
+      }));
+
+      setStudents(formattedStudents);
+    } catch (error) {
+      toast.error("Failed to load students' data, Kindly refresh");
+    }
+  };
+
+  getData();
+}, []);
 
     let [fullName,setFullName] = useState("");
     let [selectedClass, setSelectedClass] = useState("")
@@ -51,7 +51,7 @@ const StudentPageContent = () => {
   )
   return (
     <div className='StudentPageContent'>
-        <Navbar/>
+        <Navbar SchoolName={schoolName}/>
         {/* Section 1 - Student record header */}
         <div className='students-header'>
             <div className='students-header-left'>

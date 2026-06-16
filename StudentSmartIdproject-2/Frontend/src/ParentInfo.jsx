@@ -1,7 +1,7 @@
 import React from 'react'
 import './PersonalInfoCard.css'
 
-const parentInfo = ({student}) => {
+const parentInfo = ({studentData}) => {
   return (
     <div>
         <div className='personalinfo-card-main-div'>
@@ -9,21 +9,21 @@ const parentInfo = ({student}) => {
             
             <div>
             <p><b>Mother's name</b></p>
-            <p>Mamta Sharma</p>
+            <p>{studentData?.parentInfo.motherName}</p>
             <p><b>Father's name</b></p>
-            <p>Dayanand Sharma</p>
+            <p>{studentData?.parentInfo.fatherName}</p>
             
             
             </div>
             
             <div>
               <p><b>Mother's contact number</b></p>
-            <p>7310895979</p>
+            <p>{studentData?.parentInfo.motherPhone}</p>
             <p><b>Father's contact number</b></p>
-            <p>9897653017</p>
+            <p>{studentData?.parentInfo.fatherPhone}</p>
             <p><b>Emergancy contact number</b></p>
-            <p>9897653017</p>
-            <p><b>Father's Email :</b> Dayanand123sharma@gmail.com</p>
+            <p>{studentData?.parentInfo.emergencyContact}</p>
+            <p><b>Father's Email :</b> {studentData?.parentInfo.fatherEmail}</p>
             </div>
           </div>
     </div>

@@ -1,21 +1,21 @@
 import React from 'react'
 import './PersonalInfoCard.css'
 
-const PersonalInfoCard = ({student}) => {
+const PersonalInfoCard = ({studentData}) => {
   return (
     <div>
         <div className='personalinfo-card-main-div'>
             <p className='profile-name'>Personal Info</p>
-            <p><b>DOB</b>   21/03/2006</p>
-            <p><b>Gender male</b></p>
-            <p><b>Blood group</b> AB+</p>
+            <p><b>DOB</b>    {new Date(studentData?.dateOfBirth).toLocaleDateString()}</p>
+            <p><b>Gender {studentData?.gender}</b></p>
+            <p><b>Blood group</b> {studentData?.bloodGroup}</p>
             <p><b>Aadhar number</b></p>
-            <p>1234 5678 9876</p>
+            <p>{studentData?.aadhaarNumber}</p>
             <p><b>Email</b></p>
-            <p>nikhilsharma74540@gmail.com </p>
-            <p><b>Nationality</b> India</p>
-            <p><b>City</b> Agra</p>
-            <p><b>Locality</b> Barauli Ahir</p>
+            <p>{studentData?.email} </p>
+            <p><b>Nationality</b> {studentData?.nationality}</p>
+            <p><b>City</b> {studentData?.address.city}</p>
+            <p><b>Locality</b> {studentData?.address.locality}</p>
         </div>
     </div>
   )

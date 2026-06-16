@@ -1,18 +1,18 @@
 import React from 'react'
 import './ProfileCard.css'
 
-const ProfileCard = ({id}) => {
+const ProfileCard = ({studentData}) => {
   return (
    
         <div className='profile-card-main-div'>
             <img className='profile-picture' src="/user-nikhil.png" alt="Profile" />
-            <p className='profile-name'>Nikhil Sharma</p>
-            <p>Roll no.  {id}</p>
-            <p>Class  XII</p>
-            <p>Section  A</p>
-            <p>Admission no.  9786</p>
-            <p>Ph no.  7454088807</p>
-            <p>Session 2026-27</p>
+            <p className='profile-name'>{studentData?.name}</p>
+            <p>Roll no.   {studentData?.rollNumber}</p>
+            <p>Class  {studentData?.className}</p>
+            <p>Section  {studentData?.section}</p>
+            <p>Admission no.  {studentData?.admissionNumber}</p>
+            <p>Ph no.  {studentData?.phone}</p>
+            <p>Session {studentData?.session}</p>
         </div>
   )
 }

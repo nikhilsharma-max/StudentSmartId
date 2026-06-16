@@ -77,3 +77,113 @@ module.exports.getWeeklyAttendance = async (req, res) => {
         });
     }
 };
+
+module.exports.getRecentAttendance = async(req,res)=>{
+    try {
+
+        const recentAttendance = await Attendance.find()
+                .populate({
+                    path: "studentId",
+                    select:"name rollNumber",
+                    populate: {
+                    path: "classId",
+                    select:"className section"
+                }
+        })
+            .sort({ createdAt: -1 })
+            .limit(10);
+
+        return res.status(200).json({
+            success:true,
+            data:recentAttendance
+        });
+
+    } catch (error) {
+
+        return res.status(500).json({
+            success:false,
+            message:"Failed to fetch recent attendance"
+        });
+
+    }
+}
+
+module.exports.getAttendanceHeatmap = async (req, res) => {
+    try {
+
+        const { id } = req.params;
+
+        const now = new Date();
+
+        const currentYear = now.getFullYear();
+        const currentMonth = now.getMonth();
+
+        const startOfMonth = new Date(
+            currentYear,
+            currentMonth,
+            1
+        );
+
+        const endOfMonth = new Date(
+            currentYear,
+            currentMonth + 1,
+            0,
+            23,
+            59,
+            59,
+            999
+        );
+
+        const attendance = await Attendance.find({
+            studentId: id,
+            date: {
+                $gte: startOfMonth,
+                $lte: endOfMonth
+            }
+        });
+
+        const attendanceMap = {};
+
+        attendance.forEach((record) => {
+
+            const day = new Date(
+                record.date
+            ).getDate();
+
+            attendanceMap[day] = record.status;
+        });
+
+        const totalDays = new Date(
+            currentYear,
+            currentMonth + 1,
+            0
+        ).getDate();
+
+        const heatmapData = [];
+
+        for (let day = 1; day <= totalDays; day++) {
+
+            heatmapData.push({
+                day,
+                status:
+                    attendanceMap[day] ||
+                    "No Record"
+            });
+        }
+
+        return res.status(200).json({
+            success: true,
+            data: heatmapData
+        });
+
+    } catch (error) {
+
+        console.log(error);
+
+        return res.status(500).json({
+            success: false,
+            message:
+                "Failed to fetch attendance heatmap"
+        });
+    }
+};

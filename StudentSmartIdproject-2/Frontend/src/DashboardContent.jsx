@@ -20,14 +20,16 @@ const [totalPresentToday,setTotalPresentToday] = useState(0);
 const [totalAbsentToday,setTotalAbsentToday] = useState(0);
 const [totalLateToday,setTotalLateToday] = useState(0);
 const [weeklyData,setWeeklyData] = useState([0,0,0,0,0,0,0]);
-let data = [];
+const [liveTableData,setLiveTableData] = useState([]);
 useEffect(() => {
 
     const getSchoolName = async () => {
         try {
             const response = await api.get("/schoolSetting");
             const dashboardData = await api.get("/dashboard/stats");
-            const weeklyData = await api.get("/dashboard/weeklystats")
+            const weeklyData = await api.get("/dashboard/weeklystats");
+            const liveTableData = await api.get("dashboard/live-activity-table");
+            setLiveTableData(liveTableData.data.data);
             setSchoolName(response.data.data[0].schoolName);
             setTotalPresentToday(dashboardData.data.data.totalPresentToday);
             setTotalAbsentToday(dashboardData.data.data.totalAbsentToday)
@@ -57,7 +59,7 @@ useEffect(() => {
           <WeeklyBarChart weeklyData={weeklyData} className='WeeklyBarChart'/>
         </div>
         <div className='RecentActivity'>
-          <RecentActivity/>
+          <RecentActivity liveTableData={liveTableData}/>
         </div>
     </div>
   )

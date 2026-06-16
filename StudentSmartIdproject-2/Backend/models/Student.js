@@ -192,7 +192,11 @@ const studentSchema = new mongoose.Schema(
         emergencyContact: {
             type: String,
             default: ""
-        }
+        },
+        fatherEmail:{
+            type:String,
+            default:""
+        },
     },
 
     // =========================

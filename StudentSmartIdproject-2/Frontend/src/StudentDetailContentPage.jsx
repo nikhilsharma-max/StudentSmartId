@@ -9,55 +9,60 @@ import { UserRoundX } from 'lucide-react';
 import { ClockAlert } from 'lucide-react';
 import PersonalInfoCard from './PersonalInfoCard';
 import ParentInfo from './ParentInfo';
-import WeeklyBarChart from './components/Charts/WeeklyBarChart';
 import HeatMap from './components/Charts/HeatMap';
+import { useEffect,useState } from 'react';
 import { useParams } from 'react-router-dom';
-const attendanceData = [
-  { day: 1, status: "Present" },
-  { day: 2, status: "Present" },
-  { day: 3, status: "Late" },
-  { day: 4, status: "Present" },
-  { day: 5, status: "Present" },
-  { day: 6, status: "Present" },
-  { day: 7, status: "Absent" },
+import api from './api/axios';
+import { toast } from 'react-toastify';
 
-  { day: 8, status: "Present" },
-  { day: 9, status: "Late" },
-  { day: 10, status: "Present" },
-  { day: 11, status: "Present" },
-  { day: 12, status: "Present" },
-  { day: 13, status: "Absent" },
-  { day: 14, status: "Absent" },
-
-  { day: 15, status: "Present" },
-  { day: 16, status: "Present" },
-  { day: 17, status: "Late" },
-  { day: 18, status: "Present" },
-  { day: 19, status: "Present" },
-  { day: 20, status: "Present" },
-  { day: 21, status: "Absent" },
-
-  { day: 22, status: "Present" },
-  { day: 23, status: "Present" },
-  { day: 24, status: "Present" },
-  { day: 25, status: "Late" },
-  { day: 26, status: "Present" },
-  { day: 27, status: "Present" },
-  { day: 28, status: "Absent" },
-
-  { day: 29, status: "Absent" },
-  { day: 30, status: "Present" },
-  { day: 31, status: "Absent" },
-];
 
 const StudentDetailContentPage = () => {
-          let {id} = useParams();
-          let present = 198;
-          let absent = 26;
-          let late = 13
+const [schoolName, setSchoolName] = useState("School's Name");
+const [attendanceSummary, setAttendanceSummary] = useState([]);
+const [studentDetails, setStudentDetails] = useState(null);
+const [attendanceData, setAttendanceData] = useState([]);
+let { id } = useParams();
+
+useEffect(() => {
+  const getDetails = async () => {
+    try {
+      const response = await api.get("/schoolSetting");
+      const attendanceSummaryData = await api.get(
+        `/attendance/summary/${id}`
+      );
+      const studentDetailsData = await api.get(
+        `/student/${id}`
+      );
+      const response2 = await api.get(`/dashboard/heatmap/${id}`);
+      setAttendanceData(response2.data.data);
+      setSchoolName(
+        response.data.data[0].schoolName
+      );
+
+      setAttendanceSummary(
+        attendanceSummaryData.data.message
+      );
+
+      setStudentDetails(
+        studentDetailsData.data.student
+      );
+
+    } catch (error) {
+      console.log(error);
+      toast.error(
+        "Cannot fetch student's detail"
+      );
+    }
+  };
+
+  getDetails();
+}, [id]);
+          let present = attendanceSummary.presentCount;
+          let absent = attendanceSummary.lateCount;
+          let late = attendanceSummary.lateCount;
   return (
     <div className='Dashboard'>
-      <Navbar />
+      <Navbar SchoolName={schoolName}/>
       {/* Section 1 - Attendance page header */}
       <div className='Attendance-header'>
         <div className='Attendance-header-left'>
@@ -72,7 +77,7 @@ const StudentDetailContentPage = () => {
 
       {/* Row one  Profile card and attendance summary */}
       <div className='row-one-details'>
-        <ProfileCard id={id}/>
+        <ProfileCard studentData={studentDetails}/>
         <div className='AttendanceSummary'>
           <CardSmall heading="Attendance %" data={((present)/(present+absent)*(100)).toFixed(2)} detail="Total attendance %" icon={ShieldCheck} />
           <CardSmall heading="Present Days" data={present} detail="Days present in school" icon={UserCheck} />
@@ -82,12 +87,12 @@ const StudentDetailContentPage = () => {
           <CardSmall heading="Late entries" data={late} detail="Days come late to school" icon={ClockAlert} />
         </div>
         <div className='personal-info-div'>
-          <PersonalInfoCard/>
+          <PersonalInfoCard studentData={studentDetails}/>
         </div>
       </div>
       <div className='parent-info-and-chart'>
         <div className='parent-info-div'>
-          <ParentInfo/>
+          <ParentInfo studentData={studentDetails}/>
         </div>
         <div className='parent-info-div'>
           <p>Attendace heatmap</p>

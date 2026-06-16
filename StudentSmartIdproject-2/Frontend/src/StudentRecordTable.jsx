@@ -3,6 +3,7 @@ import './StudentRecordTable.css'
 import { Eye } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
 const StudentRecordTable = ({ students }) => {
+
   return (
     <div className='Search-student-main-div'>
       <div className='Search-student-heading'>
@@ -25,11 +26,11 @@ const StudentRecordTable = ({ students }) => {
                 <tr key={student.id}>
                   <td>{student.name}</td>
                   <td>{student.roll}</td>
-                  <td>{student.class}</td>
+                  <td>{student.class}-{student.section}</td>
                   <td>
                     <span
                       className={
-                        student.status === "On time"
+                        student.status === "On time" || "Active"
                           ? "status-green"
 
                           : student.status === "Late"
@@ -43,7 +44,7 @@ const StudentRecordTable = ({ students }) => {
                   </td>
                   <td>
                     <NavLink to={`${student.id}`}>
-                      <button className='action-button'>View <Eye className='eye-icon' /></button>
+                      <button className='action-button'>View <Eye className='eye-icon'/></button>
                     </NavLink>
                   </td>
                 </tr>
