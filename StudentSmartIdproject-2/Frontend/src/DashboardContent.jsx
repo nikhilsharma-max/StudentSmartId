@@ -49,10 +49,10 @@ useEffect(() => {
     <div className='Dashboard'>
         <Navbar SchoolName={schoolName}/>
         <div className='top-section-card'>
-          <CardSmall heading="Total Students" data={totalStudent} detail="Number of registered students 1200" icon={User} />
-          <CardSmall heading="Total Present today" data={totalPresentToday} detail="Number of registered students 1200" icon={ UserCheck} />
-          <CardSmall heading="Total Absent today" data={totalAbsentToday} detail="Number of registered students 1200" icon={UserRoundX} />
-          <CardSmall heading="Total Late enteirs today" data={totalLateToday} detail="Number of registered students 1200" icon={ClockAlert} />
+          <CardSmall heading="Total Students" data={totalStudent} detail="Number of registered students" icon={User} />
+          <CardSmall heading="Total Present today" data={totalPresentToday} detail="Students present today" icon={ UserCheck} />
+          <CardSmall heading="Total Absent today" data={totalAbsentToday} detail="Students absent today" icon={UserRoundX} />
+          <CardSmall heading="Total Late enteirs today" data={totalLateToday} detail="Students late today" icon={ClockAlert} />
         </div>
         <div className="section-two-chart">
           <AttendancePieChart present={totalPresentToday} absent={totalAbsentToday} late={totalLateToday}></AttendancePieChart>

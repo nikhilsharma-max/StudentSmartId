@@ -8,7 +8,7 @@ const ProfileCard = ({studentData}) => {
             <img className='profile-picture' src="/user-nikhil.png" alt="Profile" />
             <p className='profile-name'>{studentData?.name}</p>
             <p>Roll no.   {studentData?.rollNumber}</p>
-            <p>Class  {studentData?.className}</p>
+            <p>Class  {studentData?.classId.className}</p>
             <p>Section  {studentData?.section}</p>
             <p>Admission no.  {studentData?.admissionNumber}</p>
             <p>Ph no.  {studentData?.phone}</p>

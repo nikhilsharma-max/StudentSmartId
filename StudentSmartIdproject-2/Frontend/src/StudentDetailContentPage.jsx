@@ -14,15 +14,53 @@ import { useEffect,useState } from 'react';
 import { useParams } from 'react-router-dom';
 import api from './api/axios';
 import { toast } from 'react-toastify';
-
+import { useNavigate } from 'react-router-dom';
 
 const StudentDetailContentPage = () => {
 const [schoolName, setSchoolName] = useState("School's Name");
 const [attendanceSummary, setAttendanceSummary] = useState([]);
 const [studentDetails, setStudentDetails] = useState(null);
 const [attendanceData, setAttendanceData] = useState([]);
-let { id } = useParams();
+const [showDeleteModal, setShowDeleteModal] = useState(false);
+const [deleteConfirmation, setDeleteConfirmation] = useState("");
+const handleDeleteClick = () => {
+  setDeleteConfirmation("");
+  setShowDeleteModal(true);
+};
+const confirmDelete = async () => {
 
+  if (
+  !studentDetails ||
+  deleteConfirmation.trim().toLowerCase() !==
+  studentDetails?.name?.trim().toLowerCase()
+) {
+  toast.error("Student name does not match");
+  return;
+}
+
+  try {
+
+    await api.delete(
+      `/student/${id}`
+    );
+
+    toast.success(
+      "Student deleted successfully"
+    );
+    setShowDeleteModal(false);
+    navigate("/student");
+
+  } catch (error) {
+
+    console.log(error);
+
+    toast.error(
+      "Failed to delete student"
+    );
+  }
+};
+let { id } = useParams();
+const navigate = useNavigate();
 useEffect(() => {
   const getDetails = async () => {
     try {
@@ -70,8 +108,13 @@ useEffect(() => {
           <h1>Check and Edit student details</h1>
         </div>
         <div className='Attendance-header-right'>
-          <button className='edit-student-button'>Edit  </button>
-          <button className='attendance-button'>Remove</button>
+          <button className='edit-student-button' onClick={()=>{navigate(`/student/edit/${id}`)}}>Edit  </button>
+          <button
+  className="attendance-button"
+  onClick={handleDeleteClick}
+>
+  Remove
+</button>
         </div>
       </div>
 
@@ -99,6 +142,63 @@ useEffect(() => {
           <HeatMap attendanceData={attendanceData}/>
         </div>
       </div>
+{
+  showDeleteModal && (
+
+    <div className="delete-modal-overlay">
+
+      <div className="delete-modal">
+
+        <h2>Delete Student</h2>
+
+        <p>
+          This action cannot be undone.
+        </p>
+
+        <p>
+          Type the student's name to
+          confirm deletion:
+        </p>
+
+        <div className="student-name-box">
+          {studentDetails?.name}
+        </div>
+
+        <input
+          type="text"
+          value={deleteConfirmation}
+          onChange={(e) =>
+            setDeleteConfirmation(
+              e.target.value
+            )
+          }
+          placeholder="Enter student name"
+        />
+
+        <div className="modal-buttons">
+
+          <button className='new-btn'
+            onClick={() =>
+              setShowDeleteModal(false)
+            }
+          >
+            Cancel
+          </button>
+
+          <button className='new-btn'
+            onClick={confirmDelete}
+          >
+            Delete
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  )
+}
     </div>
   )
 }

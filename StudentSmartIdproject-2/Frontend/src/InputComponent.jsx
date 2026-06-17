@@ -1,7 +1,9 @@
 import React, { useState } from 'react'
 import './InputComponent.css'
-const InputComponent = ({fullName,selectedClass,handleNameChange,selectClass}) => {
+import { useNavigate } from 'react-router-dom';
 
+const InputComponent = ({fullName,selectedClass,handleNameChange,selectClass}) => {
+const navigate = useNavigate();
   return (
     <form action="">
         <div className='form-items'>
@@ -30,7 +32,7 @@ const InputComponent = ({fullName,selectedClass,handleNameChange,selectClass}) =
         </select>
        </div>
         </div>
-        <button type='button' className='header-button'>+ Add Student</button> 
+        <button type='button' className='header-button'  onClick={() => navigate('/student/add')} >+ Add Student</button> 
         </div>
          
     </form>

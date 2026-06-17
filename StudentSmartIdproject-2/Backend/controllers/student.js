@@ -120,6 +120,7 @@ module.exports.updateStudentById = async(req,res)=>{
 
         try{
             let updateData = req.body;
+            console.log(updateData);
             if(Object.keys(updateData).length === 0){
                 return res.status(400).json({
                     success: false,
@@ -134,7 +135,6 @@ module.exports.updateStudentById = async(req,res)=>{
                     message:"Invalid update data",
                 })
             }
-            
             await logActivity(req.user.userId, "UPDATE_STUDENT", "Student", updatedStudent._id, "Student record updated", oldData, updatedStudent);
             return res.status(200).json({
                 success:true,

@@ -167,7 +167,7 @@ module.exports.getAttendanceHeatmap = async (req, res) => {
                 day,
                 status:
                     attendanceMap[day] ||
-                    "No Record"
+                    "norecord"
             });
         }
 

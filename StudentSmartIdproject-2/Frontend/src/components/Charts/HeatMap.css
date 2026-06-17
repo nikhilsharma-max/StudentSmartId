@@ -26,3 +26,7 @@
 .absent {
   background: #ef4444;
 }
+
+.norecord {
+  background-color: rgb(209, 232, 224);
+}

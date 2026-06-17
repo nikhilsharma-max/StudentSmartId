@@ -7,8 +7,9 @@ import { UserCheck } from 'lucide-react';
 import { UserRoundX } from 'lucide-react';
 import { ClockAlert } from 'lucide-react';
 import { CardSmall } from './CardSmall'
+import { useEffect } from 'react';
 import AttendanceRecordTable from './AttendanceRecordTable';
-
+import { toast } from 'react-toastify/unstyled';
 const students = [
     //ye backend se real data hoga
   {
@@ -37,6 +38,29 @@ const students = [
 ];
 
 const AttendancePageContent = () => {
+const [schoolName, setSchoolName] = useState("School's Name");
+const [totalStudent,setTotalStudent] = useState(0);
+const [totalPresentToday,setTotalPresentToday] = useState(0);
+const [totalAbsentToday,setTotalAbsentToday] = useState(0);
+const [totalLateToday,setTotalLateToday] = useState(0);
+    useEffect(() => {
+
+        const getSchoolName = async () => {
+            try {
+                const response = await api.get("/schoolSetting");
+                const dashboardData = await api.get("/dashboard/stats");
+                setSchoolName(response.data.data[0].schoolName);
+                console.log(dashboardData.data.data);
+                setTotalPresentToday(dashboardData.data.data.totalPresentToday);
+                setTotalAbsentToday(dashboardData.data.data.totalAbsentToday)
+                setTotalStudent(dashboardData.data.data.totalStudents);
+                setTotalLateToday(dashboardData.data.data.totalLateToday);
+            } catch (error) {
+                toast.error("Failed to load School data");
+            }
+        };
+            getSchoolName();
+        }, []);
     let [attendanceData, setAttendanceData] = useState(students);//real data
     let [draftAttendanceData, setDraftAttendanceData] = useState(students);//temporary edit data
     let updateStatus = (studentId, newStatus) => {
@@ -48,7 +72,7 @@ const AttendancePageContent = () => {
             )
         );
     };
-
+    
     let [fullName,setFullName] = useState("");
     let [selectedClass,setSelectedClass] = useState("");
     let [selectedStatus,setSelectedStatus] = useState("");
@@ -93,7 +117,7 @@ let markAllPresent = () => {
 
   return (
     <div className='Attendance-page-content'>
-        <Navbar/>
+        <Navbar SchoolName={schoolName}/>
         {/* Section 1 - Attendance page header */}
         <div className='Attendance-header'>
             <div className='Attendance-header-left'>
@@ -112,10 +136,10 @@ let markAllPresent = () => {
             </div>
         </div>
         <div className='attendance-card'>
-          <CardSmall heading="Total Students" data={1200} detail="Number of registered students 1200" icon={User} />
-          <CardSmall heading="Total Present today" data={987} detail="Number of registered students 1200" icon={ UserCheck} />
-          <CardSmall heading="Total Absent today" data={1200-987} detail="Number of registered students 1200" icon={UserRoundX} />
-          <CardSmall heading="Total Late enteirs today" data={19} detail="Number of registered students 1200" icon={ClockAlert} />
+          <CardSmall heading="Total Students" data={totalStudent} detail="Number of registered students" icon={User} />
+          <CardSmall heading="Total Present today" data={totalPresentToday} detail="Students present today" icon={ UserCheck} />
+          <CardSmall heading="Total Absent today" data={totalAbsentToday} detail="Students absent today" icon={UserRoundX} />
+          <CardSmall heading="Total Late enteirs today" data={totalLateToday} detail="Students late today" icon={ClockAlert} />
         </div>
         {/*Section 2 - Student record table */}
         <div className='student-record-table'>

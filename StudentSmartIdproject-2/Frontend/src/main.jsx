@@ -20,16 +20,17 @@ import ProtectedRoute from './components/ProtectedRoute'
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Logout from './components/Logout'
-
+import AddStudent from './components/AddStudent/AddStudent'
+import EditStudent from './components/Edit Student/EditStudent'
 const router = createBrowserRouter([
   {
     path:"/verify-email",
     element:<VerifyEmail/>
   },
-{
-path:'',
-element:<Login/>
-},
+  {
+  path:'',
+  element:<Login/>
+  },
   {
     path:"/login",
     element:<Login/>
@@ -54,6 +55,14 @@ element:<Login/>
         path:'/student',
         element:<StudentPageContent/>,
       },
+        {
+            path:'/student/add',
+            element:<AddStudent/>
+        },
+        {
+          path:'/student/edit/:id',
+          element:<EditStudent/>
+        },
       {
           path:'/student/:id',  
           element:<StudentDetailContentPage/>
