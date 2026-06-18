@@ -1,92 +1,150 @@
-import React from 'react'
-import Navbar from '@/Navbar'
-import AccordionFilledDemo from '@/components/ui/AccordionSplitDemo'
-import './ClassPageContent.css'
-
-let items = [
-  {
-    title: 'Class LKG',
-    content: `You can track your order by logging into your account and visiting the "Orders" section. You'll receive tracking information via email once your order ships. For real-time updates, you can also use the tracking number provided in your shipping confirmation email.`,
-    Section: 'A'
-  },
-  {
-    title: 'Class UKG',
-    content:
-      'We offer a 30-day return policy for most items. Products must be unused and in their original packaging. To initiate a return, please contact our customer service team or use the return portal in your account dashboard.'
-  },
-  {
-    title: 'CLASS 1',
-    content:
-      'Our customer support team is available 24/7. You can reach us via live chat, email at support@example.com, or by phone at 1-800-123-4567. For faster service, please have your order number ready when contacting us.'
-  },
-  {
-    title: 'Class II',
-    content: `You can track your order by logging into your account and visiting the "Orders" section. You'll receive tracking information via email once your order ships. For real-time updates, you can also use the tracking number provided in your shipping confirmation email.`
-  },
-  {
-    title: 'Class III',
-    content:
-      'We offer a 30-day return policy for most items. Products must be unused and in their original packaging. To initiate a return, please contact our customer service team or use the return portal in your account dashboard.'
-  },
-  {
-    title: 'CLASS IV',
-    content:
-      'Our customer support team is available 24/7. You can reach us via live chat, email at support@example.com, or by phone at 1-800-123-4567. For faster service, please have your order number ready when contacting us.'
-  },
-  {
-    title: 'Class V',
-    content: `You can track your order by logging into your account and visiting the "Orders" section. You'll receive tracking information via email once your order ships. For real-time updates, you can also use the tracking number provided in your shipping confirmation email.`
-  },
-  {
-    title: 'Class VI',
-    content:
-      'We offer a 30-day return policy for most items. Products must be unused and in their original packaging. To initiate a return, please contact our customer service team or use the return portal in your account dashboard.'
-  },
-  {
-    title: 'CLASS VII',
-    content:
-      'Our customer support team is available 24/7. You can reach us via live chat, email at support@example.com, or by phone at 1-800-123-4567. For faster service, please have your order number ready when contacting us.'
-  },
-  {
-    title: 'Class VII',
-    content: `You can track your order by logging into your account and visiting the "Orders" section. You'll receive tracking information via email once your order ships. For real-time updates, you can also use the tracking number provided in your shipping confirmation email.`
-  },
-  {
-    title: 'Class VIII',
-    content:
-      'We offer a 30-day return policy for most items. Products must be unused and in their original packaging. To initiate a return, please contact our customer service team or use the return portal in your account dashboard.'
-  },
-  {
-    title: 'CLASS IX',
-    content:
-      'Our customer support team is available 24/7. You can reach us via live chat, email at support@example.com, or by phone at 1-800-123-4567. For faster service, please have your order number ready when contacting us.'
-  },
-  {
-    title: 'Class X',
-    content: `You can track your order by logging into your account and visiting the "Orders" section. You'll receive tracking information via email once your order ships. For real-time updates, you can also use the tracking number provided in your shipping confirmation email.`
-  },
-  {
-    title: 'Class XI',
-    content:
-      'We offer a 30-day return policy for most items. Products must be unused and in their original packaging. To initiate a return, please contact our customer service team or use the return portal in your account dashboard.'
-  },
-  {
-    title: 'CLASS XII',
-    content:
-      'Our customer support team is available 24/7. You can reach us via live chat, email at support@example.com, or by phone at 1-800-123-4567. For faster service, please have your order number ready when contacting us.'
-  }
-]
+import React, { useEffect, useState } from "react";
+import "./ClassPageContent.css";
+import Navbar from "@/Navbar";
+import api from "@/api/axios";
+import { toast } from "react-toastify";
+import { ChevronDown, ChevronUp, Users, School } from "lucide-react";
 
 const ClassPageContent = () => {
-  return (
-    <div className='class-page-content' >
-        <Navbar/>
-        <div className='class-page-content-main-div'>
-            <AccordionFilledDemo items={items}/>
-        </div>
-        
-    </div>
-  )
-}
+  const [schoolName, setSchoolName] = useState("School's Name");
+  const [classesData, setClassesData] = useState([]);
+  const [openClass, setOpenClass] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-export default ClassPageContent
+  useEffect(() => {
+    const getClasses = async () => {
+      try {
+        const response = await api.get("/classes/overview");
+        const response2 = await api.get("/schoolSetting");
+        setSchoolName(response2.data.data[0].schoolName);
+        setClassesData(response.data.data || []);
+      } catch (error) {
+        toast.error("Failed to load classes");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    getClasses();
+  }, []);
+
+  const toggleClass = (className) => {
+    setOpenClass(
+      openClass === className ? null : className
+    );
+  };
+
+  return (
+    <div className="class-page-content">
+      <Navbar SchoolName={schoolName} />
+
+      <div className="class-page-main">
+
+        <div className="class-page-header">
+          <div>
+            <p>Classes Overview</p>
+            <h1>
+              View all classes and sections
+            </h1>
+          </div>
+        </div>
+
+        {loading ? (
+          <div className="class-loading">
+            Loading classes...
+          </div>
+        ) : classesData.length === 0 ? (
+          <div className="class-empty">
+            No class data available
+          </div>
+        ) : (
+          classesData.map((cls) => (
+            <div
+              className="class-card"
+              key={cls.className}
+            >
+              <div
+                className="class-header"
+                onClick={() =>
+                  toggleClass(cls.className)
+                }
+              >
+                <div className="class-header-left">
+                  <School size={20} />
+
+                  <span>
+                    Class {cls.className}
+                  </span>
+                </div>
+
+                <div className="class-header-center">
+                  <span>
+                    Sections :
+                    {" "}
+                    {cls.totalSections}
+                  </span>
+
+                  <span>
+                    Students :
+                    {" "}
+                    {cls.totalStudents}
+                  </span>
+                </div>
+
+                <div>
+                  {openClass ===
+                  cls.className ? (
+                    <ChevronUp />
+                  ) : (
+                    <ChevronDown />
+                  )}
+                </div>
+              </div>
+
+              {openClass ===
+                cls.className && (
+                <div className="section-container">
+
+                  {cls.sections.map(
+                    (section) => (
+                      <div
+                        key={
+                          section.section
+                        }
+                        className="section-card"
+                      >
+                        <div className="section-left">
+                          <span>
+                            Section{" "}
+                            {
+                              section.section
+                            }
+                          </span>
+                        </div>
+
+                        <div className="section-right">
+                          <Users
+                            size={18}
+                          />
+
+                          <span>
+                            {
+                              section.totalStudents
+                            }{" "}
+                            Students
+                          </span>
+                        </div>
+                      </div>
+                    )
+                  )}
+                </div>
+              )}
+            </div>
+          ))
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default ClassPageContent;

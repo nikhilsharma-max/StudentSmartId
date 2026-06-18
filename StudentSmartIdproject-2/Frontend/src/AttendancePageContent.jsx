@@ -9,48 +9,25 @@ import { ClockAlert } from 'lucide-react';
 import { CardSmall } from './CardSmall'
 import { useEffect } from 'react';
 import AttendanceRecordTable from './AttendanceRecordTable';
-import { toast } from 'react-toastify/unstyled';
-const students = [
-    //ye backend se real data hoga
-  {
-    id: 1,
-    name: "Nikhil",
-    roll: 13,
-    class: "X",
-    status: "On time"
-  },
-
-  {
-    id: 2,
-    name: "Rahul",
-    roll: 25,
-    class: "IX",
-    status: "Late"
-  },
-
-  {
-    id: 3,
-    name: "Riya",
-    roll: 18,
-    class: "LKG",
-    status: "Absent"
-  }
-];
+import { toast } from 'react-toastify';
+import api from './api/axios';
 
 const AttendancePageContent = () => {
+const[students,setStudentAttendanceData] = useState([]);
 const [schoolName, setSchoolName] = useState("School's Name");
 const [totalStudent,setTotalStudent] = useState(0);
 const [totalPresentToday,setTotalPresentToday] = useState(0);
 const [totalAbsentToday,setTotalAbsentToday] = useState(0);
 const [totalLateToday,setTotalLateToday] = useState(0);
+let [attendanceData, setAttendanceData] = useState(students);//real data
+let [draftAttendanceData, setDraftAttendanceData] = useState(students);//temporary edit data
+let [selectedDate,setSelectedDate] = useState(new Date().toISOString().split("T")[0]);
     useEffect(() => {
-
         const getSchoolName = async () => {
             try {
                 const response = await api.get("/schoolSetting");
                 const dashboardData = await api.get("/dashboard/stats");
                 setSchoolName(response.data.data[0].schoolName);
-                console.log(dashboardData.data.data);
                 setTotalPresentToday(dashboardData.data.data.totalPresentToday);
                 setTotalAbsentToday(dashboardData.data.data.totalAbsentToday)
                 setTotalStudent(dashboardData.data.data.totalStudents);
@@ -61,11 +38,39 @@ const [totalLateToday,setTotalLateToday] = useState(0);
         };
             getSchoolName();
         }, []);
-    let [attendanceData, setAttendanceData] = useState(students);//real data
-    let [draftAttendanceData, setDraftAttendanceData] = useState(students);//temporary edit data
+        useEffect(()=>{
+
+            const dateData = async()=>{
+                try {
+                const response2 = await api.get(
+                    `/attendance/date/${selectedDate}`
+                );
+                const formattedData = response2.data.data.map(
+                    (record) => ({
+                        attendanceId: record._id,
+                        id: record?.studentId?._id,
+                        name: record?.studentId?.name,
+                        roll: record?.studentId?.rollNumber,
+                        class: record?.studentId?.classId?.className,
+                        section: record?.studentId?.classId?.section,
+                        status: record?.status
+                    })
+                );
+                setStudentAttendanceData(formattedData);
+                setDraftAttendanceData(formattedData);
+                setAttendanceData(formattedData);
+
+                // console.log(response2.data.data);  
+                } catch (error) {
+                    toast.error("Failed to load data");
+                }
+            }
+            dateData();
+        },[selectedDate]);
+
     let updateStatus = (studentId, newStatus) => {
         setDraftAttendanceData(
-            draftAttendanceData.map(student =>
+            draftAttendanceData?.map(student =>
                 student.id === studentId
                     ? { ...student, status: newStatus }
                     : student
@@ -76,7 +81,7 @@ const [totalLateToday,setTotalLateToday] = useState(0);
     let [fullName,setFullName] = useState("");
     let [selectedClass,setSelectedClass] = useState("");
     let [selectedStatus,setSelectedStatus] = useState("");
-    let [selectedDate,setSelectedDate] = useState(new Date().toISOString().split("T")[0]);
+    let [selectedSection,setSelectedSection] = useState("");
     let handleDateChange = (event) => {
     setSelectedDate(event.target.value);
     }
@@ -89,27 +94,55 @@ const [totalLateToday,setTotalLateToday] = useState(0);
     let selectStatus = (event) =>{
         setSelectedStatus(event.target.value);
     }
-    let saveAttendance = () => {
-        setAttendanceData(draftAttendanceData);
-    };
+    let selectSection = (event)=>{
+        setSelectedSection(event.target.value);
+    }
+   let saveAttendance = async () => {
+
+  try { toast.success("Attendance saved successfully");
+    await api.put(
+        
+      "/attendance/update-attendance",
+      {
+        attendance:
+          draftAttendanceData
+      }
+    );
+   
+    setAttendanceData(
+      draftAttendanceData
+    );
+
+
+
+  } catch(error){
+    toast.error(
+      "Failed to save attendance"
+    );
+
+  }
+
+};
 
     //Add other filter of date and status after completing backend
-    const filteredStudents = draftAttendanceData.filter((student) => {
-      const matchesSearch = student.name.toLowerCase().includes(fullName.toLowerCase());
+    const filteredStudents = draftAttendanceData?.filter((student) => {
+      const matchesSearch = student?.name?.toLowerCase().includes(fullName.toLowerCase());
       const matchesClass = selectedClass === "" || student.class === selectedClass;
-      return matchesSearch && matchesClass;
+      const matchesStatus = selectedStatus==="" || student.status === selectedStatus;
+      const matchesSection = selectedSection==="" || student.section === selectedSection;
+      return matchesSearch && matchesClass && matchesStatus && matchesSection;
     });
     //for markAllPresent button
 let markAllPresent = () => {
 
-    const filteredIds = filteredStudents.map(
+    const filteredIds = filteredStudents?.map(
         student => student.id
     );
 
     setDraftAttendanceData(prevData =>
-        prevData.map(student =>
+        prevData?.map(student =>
             filteredIds.includes(student.id)
-                ? { ...student, status: "On time" }
+                ? { ...student, status: "Present" }
                 : student
         )
     );
@@ -132,7 +165,7 @@ let markAllPresent = () => {
         <div className='Attendance-filter-section'>
             <div className='Attendance-filter'>
                 <div><p>Filter Results</p></div>
-                <InputComponentAttendancePage fullName={fullName} selectedClass={selectedClass} selectedStatus={selectedStatus} selectedDate={selectedDate} markAllPresent={markAllPresent} handleNameChange={handleNameChange} selectClass={selectClass} selectStatus={selectStatus} handleDateChange={handleDateChange}/>
+                <InputComponentAttendancePage fullName={fullName} selectedSection ={selectedSection} selectedClass={selectedClass} selectedStatus={selectedStatus} selectedDate={selectedDate} markAllPresent={markAllPresent} handleNameChange={handleNameChange} selectClass={selectClass} selectStatus={selectStatus} handleDateChange={handleDateChange} selectSection={selectSection}/>
             </div>
         </div>
         <div className='attendance-card'>

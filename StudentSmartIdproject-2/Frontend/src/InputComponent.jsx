@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import './InputComponent.css'
 import { useNavigate } from 'react-router-dom';
 
-const InputComponent = ({fullName,selectedClass,handleNameChange,selectClass}) => {
+const InputComponent = ({fullName,selectedClass,handleNameChange,selectClass,selectedSection,selectSection}) => {
 const navigate = useNavigate();
   return (
     <form action="">
@@ -31,6 +31,20 @@ const navigate = useNavigate();
             <option value="XII">XII</option>
         </select>
        </div>
+
+       <div className='drop-down-div'>
+            {/* Dropdown */}
+        <select value={selectedSection} onChange={selectSection} name='section'  id='section'>
+            <option value="">Section</option>
+            <option value="A">A</option>
+            <option value="B">B</option>
+            <option value="C">C</option>
+            <option value="D">D</option>
+            <option value="E">E</option>
+        </select>
+       </div>
+
+
         </div>
         <button type='button' className='header-button'  onClick={() => navigate('/student/add')} >+ Add Student</button> 
         </div>

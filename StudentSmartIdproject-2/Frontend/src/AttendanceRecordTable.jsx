@@ -26,7 +26,7 @@ const AttendanceRecordTable = ({students,updateStatus}) => {
                   <td>
                     <span
                       className={
-                        student.status === "On time"
+                        student.status === "Present"
                           ? "status-green"
 
                           : student.status === "Late"
@@ -39,12 +39,12 @@ const AttendanceRecordTable = ({students,updateStatus}) => {
                     </span>
                   </td>
                   <td>
-                    <button className='status-green' onClick={()=>updateStatus(student.id,"On time")}>On time</button>
+                    <button className='status-green' onClick={()=>updateStatus(student.id,"Present")}>Present</button>
                     <button className='status-yellow' onClick={()=>updateStatus(student.id,"Late")}>Late</button>
                     <button className='status-red' onClick={()=>updateStatus(student.id,"Absent")}>Absent</button>
                   </td>
                   <td>{student.roll}</td>
-                  <td>{student.class}</td>
+                  <td>{student.class}-{student.section}</td>
 
                 </tr>
               ))

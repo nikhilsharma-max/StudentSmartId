@@ -1,7 +1,118 @@
-.class-page-content-main-div{
-    margin: 10px;
-    margin-top: 8.8vh;
+.class-page-content {
+  flex: 1;
+  overflow-y: auto;
+  background: #f1f5f9;
 }
-.class-page-content{
-    overflow-y: auto;
+
+.class-page-main {
+  margin-top: 9vh;
+  padding: 10px;
+}
+
+.class-page-header {
+  background: rgb(236, 236, 247);
+  border-radius: 10px;
+  padding: 16px 20px;
+  margin-bottom: 12px;
+}
+
+.class-page-header p {
+  font-size: 28px;
+  font-weight: 700;
+  margin: 0;
+}
+
+.class-page-header h1 {
+  font-size: 18px;
+  font-weight: 500;
+  margin-top: 6px;
+}
+
+.class-card {
+  background: white;
+  border-radius: 10px;
+  overflow: hidden;
+  margin-bottom: 12px;
+  border: 1px solid #e5e7eb;
+}
+
+.class-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  padding: 18px 20px;
+
+  cursor: pointer;
+
+  transition: 0.2s;
+}
+
+.class-header:hover {
+  background: #f8fafc;
+}
+
+.class-header-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  font-weight: 700;
+  font-size: 18px;
+}
+
+.class-header-center {
+  display: flex;
+  gap: 25px;
+  font-weight: 600;
+  color: #475569;
+}
+
+.section-container {
+  border-top: 1px solid #e5e7eb;
+  padding: 15px;
+  background: #f8fafc;
+}
+
+.section-card {
+  background: white;
+
+  border-radius: 8px;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  padding: 15px 18px;
+
+  margin-bottom: 10px;
+
+  border: 1px solid #e2e8f0;
+}
+
+.section-card:last-child {
+  margin-bottom: 0;
+}
+
+.section-left {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.section-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  color: #0f766e;
+  font-weight: 600;
+}
+
+.class-loading,
+.class-empty {
+  background: white;
+  padding: 30px;
+  border-radius: 10px;
+  text-align: center;
+  font-weight: 600;
 }

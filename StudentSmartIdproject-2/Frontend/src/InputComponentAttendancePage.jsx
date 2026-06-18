@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
 import './InputComponentAttendancePage.css'
-
-const InputComponentAttendancePage = ({fullName,selectedClass,selectedStatus,selectedDate,markAllPresent,handleNameChange,selectClass,selectStatus,handleDateChange}) => {
-
+import { useNavigate } from 'react-router-dom'
+const InputComponentAttendancePage = ({fullName,selectedSection,selectedClass,selectedStatus,selectedDate,markAllPresent,handleNameChange,selectClass,selectStatus,handleDateChange,selectSection}) => {
+const navigate = useNavigate();
   return (
     <div>
     <form action="">
@@ -33,21 +33,33 @@ const InputComponentAttendancePage = ({fullName,selectedClass,selectedStatus,sel
        </div>
        <div className='drop-down-div'>
             {/* Dropdown */}
-        <select value={selectedStatus} onChange={selectStatus} name='Status'  id='Status'>
-            <option value="">All</option>
-            <option value="on-time">On time</option>
-            <option value="late">Late</option>
-            <option value="absent">Absent</option>
+        <select value={selectedSection} onChange={selectSection} name='section'  id='section'>
+            <option value="">Section</option>
+            <option value="A">A</option>
+            <option value="B">B</option>
+            <option value="C">C</option>
+            <option value="D">D</option>
+            <option value="E">E</option>
         </select>
        </div>
+       <div className='drop-down-div'>
+            {/* Dropdown */}
+        <select value={selectedStatus} onChange={selectStatus} name='status'  id='status'>
+            <option value="">All</option>
+            <option value="Present">Present</option>
+            <option value="Late">Late</option>
+            <option value="Absent">Absent</option>
+        </select>
+       </div>
+
        <div className='input-div'>
         <input value={selectedDate} onChange={handleDateChange} className='student-name-input' type="date"/>
        </div>
         </div>
         <button type='button' className='header-button' onClick={markAllPresent}>Mark All Present</button>
-        <button type='button' className='header-button'>Add Student</button>
+        <button type='button' className='header-button' onClick={()=>{navigate("/student/add")}}>Add Student</button>
         {/* redirect to report page */}
-        <button type='button' className='header-button'>Check Report</button> 
+
         <button type='button' className='date-button'>Student Records of {selectedDate}</button>
         </div>
         

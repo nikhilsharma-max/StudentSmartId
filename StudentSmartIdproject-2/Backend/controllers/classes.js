@@ -1,5 +1,6 @@
 const {Classes,classSchema} = require("../models/Classes.js");
 const { logActivity } = require("../Services/activityLogger.js");
+const { Student } = require("../models/Student");
 
 module.exports.postClasses = async(req,res)=>{
     let data = req.body;
@@ -153,4 +154,55 @@ module.exports.deleteClassById = async(req,res)=>{
             message:"Something went wrong",
         })
     }
+};
+
+module.exports.getClassesOverview = async (req, res) => {
+  try {
+
+    const classes = await Classes.find({})
+      .sort({ className: 1, section: 1 });
+
+    const overviewMap = {};
+
+    for (const cls of classes) {
+
+      const studentCount = await Student.countDocuments({
+        classId: cls._id
+      });
+
+      if (!overviewMap[cls.className]) {
+        overviewMap[cls.className] = {
+          className: cls.className,
+          totalSections: 0,
+          totalStudents: 0,
+          sections: []
+        };
+      }
+
+      overviewMap[cls.className].totalSections += 1;
+
+      overviewMap[cls.className].totalStudents += studentCount;
+
+      overviewMap[cls.className].sections.push({
+        section: cls.section,
+        totalStudents: studentCount,
+        session: cls.session,
+        status: cls.status
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      data: Object.values(overviewMap)
+    });
+
+  } catch (error) {
+
+    console.log(error);
+
+    return res.status(500).json({
+      success: false,
+      message: "Failed to fetch classes overview"
+    });
+  }
 };

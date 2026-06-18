@@ -12,6 +12,7 @@ router.get("/student/:id",roleMiddleware(["Admin","teacher"]),AttendanceControll
 router.patch("/:id",roleMiddleware(["Admin","teacher"]),AttendanceController.updateAttendanceById);
 router.delete("/:id",roleMiddleware(["Admin"]),AttendanceController.deleteAttendanceById);
 router.get("/summary/:id",roleMiddleware(["Admin","teacher"]),AttendanceController.getSummary);
-
+router.get("/date/:date",roleMiddleware(["Admin","teacher"]),AttendanceController.getAttendanceByDate);
+router.put("/update-attendance",roleMiddleware(["Admin","teacher"]),AttendanceController.updateAttendance);
 
 module.exports = router;

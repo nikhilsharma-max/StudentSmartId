@@ -245,3 +245,103 @@ module.exports.getSummary = async(req,res)=>{
         })
     }
 }
+
+module.exports.getAttendanceByDate = async (req, res) => {
+  try {
+
+    const { date } = req.params;
+
+    if (!date) {
+      return res.status(400).json({
+        success: false,
+        message: "Date is required"
+      });
+    }
+
+    const selectedDate = new Date(date);
+
+    const nextDate = new Date(selectedDate);
+    nextDate.setDate(nextDate.getDate() + 1);
+
+    const attendanceData =
+      await Attendance.find({
+        date: {
+          $gte: selectedDate,
+          $lt: nextDate
+        }
+      })
+      .populate({
+        path: "studentId",
+        select:
+          "name rollNumber classId status"
+      })
+      .populate({
+        path: "studentId",
+        populate: {
+          path: "classId",
+          select: "_id className section"
+        }
+      });
+
+    return res.status(200).json({
+      success: true,
+      count: attendanceData.length,
+      data: attendanceData
+    });
+
+  } catch (error) {
+
+    console.log(error);
+
+    return res.status(500).json({
+      success: false,
+      message:
+        "Failed to fetch attendance data"
+    });
+  }
+};
+
+module.exports.updateAttendance = async (req,res) => {
+
+  try {
+    console.log("Aa gyi treq")
+    const { attendance } = req.body;
+console.log(attendance);
+    if (!attendance?.length) {
+      return res.status(400).json({
+        success:false,
+        message:"No attendance data found"
+      });
+    }
+
+    await Promise.all(
+      attendance.map((student)=>
+        Attendance.findByIdAndUpdate(
+          student.attendanceId,
+          {
+            status: student.status
+          },
+          {
+            returnDocument:"after"
+          }
+        )
+      )
+    );
+
+    return res.status(200).json({
+      success:true,
+      message:"Attendance updated successfully"
+    });
+
+  } catch(error){
+
+    console.log(error);
+
+    return res.status(500).json({
+      success:false,
+      message:"Failed to update attendance"
+    });
+
+  }
+
+}

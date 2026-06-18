@@ -36,17 +36,22 @@ useEffect(() => {
 }, []);
 
     let [fullName,setFullName] = useState("");
-    let [selectedClass, setSelectedClass] = useState("")
+    let [selectedClass, setSelectedClass] = useState("");
+    let [selectedSection,setSelectedSection] = useState("");
     let handleNameChange = (event) =>{
         setFullName(event.target.value);
     }
     let selectClass = (event)=>{
         setSelectedClass(event.target.value);
     }
+    let selectSection = (event) =>{
+      setSelectedSection(event.target.value);
+    }
     const filteredStudents = students.filter((student) => {
       const matchesSearch = student.name.toLowerCase().includes(fullName.toLowerCase());
       const matchesClass = selectedClass === "" || student.class === selectedClass;
-      return matchesSearch && matchesClass;
+      const matchesSection = selectedSection === "" || student.section === selectedSection;
+      return matchesSearch && matchesClass && matchesSection;
     }
   )
   return (
@@ -60,7 +65,7 @@ useEffect(() => {
             </div>
             <div className='students-header-right'>
                 {/* search bar, filter bar -- class section(dropdown), add student button */}
-                <InputComponent fullName={fullName} selectedClass={selectedClass} handleNameChange={handleNameChange} selectClass={selectClass}/>
+                <InputComponent fullName={fullName} selectedClass={selectedClass} handleNameChange={handleNameChange} selectedSection={selectedSection} selectSection={selectSection} selectClass={selectClass}/>
             </div>
         </div>
         
