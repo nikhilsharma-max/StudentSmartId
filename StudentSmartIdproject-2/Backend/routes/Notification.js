@@ -13,22 +13,22 @@ const {
 );
 
 router.post(
-    "/",roleMiddleware(["Admin","teacher"]),
+    "/",roleMiddleware(["Admin","Teacher"]),
     createNotification
 );
 
 router.get(
-    "/",roleMiddleware(["Admin","teacher"]),
+    "/",roleMiddleware(["Admin","Teacher"]),
     getAllNotifications
 );
 
 router.get(
-    "/:id",roleMiddleware(["Admin","teacher"]),
+    "/:id",roleMiddleware(["Admin","Teacher"]),
     getNotificationById
 );
 
 router.delete(
-    "/:id",roleMiddleware(["Admin","teacher"]),
+    "/:id",roleMiddleware(["Admin","Teacher"]),
     deleteNotification
 );
 

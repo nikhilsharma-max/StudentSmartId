@@ -13,7 +13,7 @@ module.exports.postClasses = async(req,res)=>{
                 message:"Failed to add classes",
             })
         }
-        await logActivity(req.user.userId, "CREATE_CLASS", "Classes", classes[0]._id, "Class record created",null,classes);
+        await logActivity(req.user.userId, "CREATE_CLASS", "Classes", classes[0]._id, "Class record created",null,Classes);
         return res.status(201).json({
             success:true,
             message:"Added data succesfully",
@@ -36,6 +36,38 @@ module.exports.getClasses = async(req,res)=>{
                 message:"Failed to load class data"
             })
         }
+ const classOrder = {
+            "LKG": 1,
+            "UKG": 2,
+            "I": 3,
+            "II": 4,
+            "III": 5,
+            "IV": 6,
+            "V": 7,
+            "VI": 8,
+            "VII": 9,
+            "VIII": 10,
+            "IX": 11,
+            "X": 12,
+            "XI": 13,
+            "XII": 14
+        };
+
+        classes.sort((a,b)=>{
+
+            const classDiff =
+                classOrder[a.className] -
+                classOrder[b.className];
+
+            if(classDiff !== 0){
+                return classDiff;
+            }
+
+            return a.section.localeCompare(
+                b.section
+            );
+        });
+
         return res.status(200).json({
             success:true,
             message:"Class data was loaded",
@@ -134,8 +166,11 @@ module.exports.deleteClassById = async(req,res)=>{
                 message:"Id not valid",
             })
         }
-        const oldData = await Classes.find(id);
+
+        const oldData = await Classes.find({_id:id});
         let deletedClass = await Classes.findByIdAndDelete(id);
+
+
         if(!deletedClass){
             return res.status(404).json({
                 success:false,
@@ -149,6 +184,7 @@ module.exports.deleteClassById = async(req,res)=>{
             deletedClass,
         })
     } catch (error) {
+        console.log(error)
         return res.status(500).json({
             success:false,
             message:"Something went wrong",

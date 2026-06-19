@@ -73,7 +73,6 @@ const SchoolSettingsPageContent = () => {
           await api.get(
             "/classes"
           );
-
         const teacherRes =
           await api.get(
             "/teacher"
@@ -85,7 +84,7 @@ const SchoolSettingsPageContent = () => {
           );
 
         setClasses(
-          classRes.data.data || []
+          classRes.data.classes || []
         );
 
         setTeachers(
@@ -184,9 +183,25 @@ const SchoolSettingsPageContent = () => {
       try{
 
         setLoading(true);
+        if(
+          !schoolData?.schoolName?.trim()
+        ){
+          toast.error(
+            "School name is required"
+          );
+          return;
+        }
 
+        if(
+          !schoolData?.currentSession?.trim()
+        ){
+          toast.error(
+            "Session is required"
+          );
+          return;
+        }
         await api.patch(
-          "/schoolSetting",
+          "/schoolsetting",
           schoolData
         );
 
@@ -214,7 +229,12 @@ const SchoolSettingsPageContent = () => {
 
     <div className="settings-page">
 
-      <Navbar SchoolName={schoolData.schoolName}/>
+      <Navbar
+  SchoolName={
+    schoolData?.schoolName ||
+    "School's Name"
+  }
+/>
 
       <div className="settings-container">
 
@@ -254,7 +274,7 @@ const SchoolSettingsPageContent = () => {
             <Users size={22}/>
 
             <h3>
-              {teachers.length}
+              {teachers?.length ||0}
             </h3>
 
             <p>
@@ -268,7 +288,7 @@ const SchoolSettingsPageContent = () => {
             <GraduationCap size={22}/>
 
             <h3>
-              {classes.length}
+              {classes?.length || 0}
             </h3>
 
             <p>
@@ -283,11 +303,15 @@ const SchoolSettingsPageContent = () => {
 
             <h3>
               {
-                [...new Set(
-                  classes.map(
-                    c=>c.className
+                [
+                  ...new Set(
+                    (classes || [])
+                      .map(
+                        c => c?.className
+                      )
+                      .filter(Boolean)
                   )
-                )].length
+                ].length
               }
             </h3>
 
@@ -314,7 +338,7 @@ const SchoolSettingsPageContent = () => {
               name="schoolName"
               placeholder="School Name"
               value={
-                schoolData.schoolName
+                schoolData?.schoolName || ""
               }
               onChange={
                 handleSchoolChange
@@ -326,7 +350,7 @@ const SchoolSettingsPageContent = () => {
               name="schoolEmail"
               placeholder="School Email"
               value={
-                schoolData.schoolEmail
+                schoolData?.schoolEmail || ""
               }
               onChange={
                 handleSchoolChange
@@ -338,7 +362,7 @@ const SchoolSettingsPageContent = () => {
               name="schoolPhone"
               placeholder="School Phone"
               value={
-                schoolData.schoolPhone
+                schoolData?.schoolPhone || ""
               }
               onChange={
                 handleSchoolChange
@@ -350,7 +374,7 @@ const SchoolSettingsPageContent = () => {
               name="principalName"
               placeholder="Principal Name"
               value={
-                schoolData.principalName
+                schoolData?.principalName || ""
               }
               onChange={
                 handleSchoolChange
@@ -363,7 +387,7 @@ const SchoolSettingsPageContent = () => {
             name="schoolAddress"
             placeholder="School Address"
             value={
-              schoolData.schoolAddress
+              schoolData?.schoolAddress || ""
             }
             onChange={
               handleSchoolChange
@@ -397,7 +421,7 @@ const SchoolSettingsPageContent = () => {
             type="text"
             name="currentSession"
             value={
-              schoolData.currentSession
+              schoolData?.currentSession || ""
             }
             onChange={
               handleSchoolChange
@@ -417,7 +441,7 @@ const SchoolSettingsPageContent = () => {
 
             <select
               name="className"
-              value={classForm.className}
+              value={classForm?.className}
               onChange={handleClassChange}
             >
               <option value="">
@@ -444,7 +468,7 @@ const SchoolSettingsPageContent = () => {
               type="text"
               name="section"
               placeholder="Section"
-              value={classForm.section}
+              value={classForm?.section}
               onChange={handleClassChange}
             />
 
@@ -453,21 +477,21 @@ const SchoolSettingsPageContent = () => {
           <button
             className="save-btn"
             onClick={async () => {
-
+              console.log(classForm);
               try {
-
+                console.log("Step1");
                 await api.post(
                   "/classes",
                   classForm
                 );
-
+                console.log("Step2");
                 const response =
                   await api.get(
                     "/classes"
                   );
-                  console.log(response.data.data);
+                  console.log(response.data);
                 setClasses(
-                  response.data.data.classes
+                  response.data.data
                 );
 
                 toast.success(
@@ -478,7 +502,7 @@ const SchoolSettingsPageContent = () => {
                   className:"",
                   section:"",
                   session:
-                    schoolData.currentSession
+                    schoolData?.currentSession
                 });
 
               }
@@ -522,7 +546,7 @@ const SchoolSettingsPageContent = () => {
               <tbody>
 
                 {
-                  classes.map(
+                  (classes || []).map(
                     (cls)=>(
                       <tr
                         key={cls._id}
@@ -554,7 +578,7 @@ const SchoolSettingsPageContent = () => {
                                 try{
 
                                   await api.delete(
-                                    `/class/${cls._id}`
+                                    `/classes/${cls._id}`
                                   );
 
                                   setClasses(

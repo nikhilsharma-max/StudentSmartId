@@ -6,7 +6,7 @@ const {authMiddleware} = require("../middleware/authMiddleware.js");
 const {roleMiddleware} = require("../middleware/roleMiddleware.js");
 router.use(authMiddleware);
 router.post("",roleMiddleware(["Admin"]),SchoolSettingController.postSchoolData);
-router.get("",roleMiddleware(["Admin","teacher"]),SchoolSettingController.getSchoolData);
+router.get("",roleMiddleware(["Admin","Teacher"]),SchoolSettingController.getSchoolData);
 router.patch("",roleMiddleware(["Admin"]),SchoolSettingController.updateSchoolData);
 router.delete("/:id",roleMiddleware(["Admin"]),SchoolSettingController.deleteSchoolData);
 

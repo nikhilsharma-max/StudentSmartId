@@ -6,14 +6,14 @@ const studentController = require("../controllers/student.js");
 const {roleMiddleware} = require("../middleware/roleMiddleware.js");
 router.use(authMiddleware);
 
-router.get("",roleMiddleware(["Admin","teacher"]),studentController.getStudent);
-router.get("/:id",roleMiddleware(["Admin","teacher"]),studentController.findStudentById);
+router.get("",roleMiddleware(["Admin","Teacher"]),studentController.getStudent);
+router.get("/:id",roleMiddleware(["Admin","Teacher"]),studentController.findStudentById);
 
 
-router.post("",roleMiddleware(["Admin"]),studentController.postStudent);
+router.post("",roleMiddleware(["Admin","Teacher"]),studentController.postStudent);
 
-router.patch("/:id",roleMiddleware(["Admin"]),studentController.updateStudentById);
+router.patch("/:id",roleMiddleware(["Admin","Teacher"]),studentController.updateStudentById);
 
-router.delete("/:id",roleMiddleware(["Admin"]),studentController.deleteStudentById);
+router.delete("/:id",roleMiddleware(["Admin","Teacher"]),studentController.deleteStudentById);
 
 module.exports = router;

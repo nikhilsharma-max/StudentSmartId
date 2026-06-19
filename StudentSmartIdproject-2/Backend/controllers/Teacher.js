@@ -8,7 +8,6 @@ module.exports.postTeacherData = async (req, res) => {
     try {
 
         const data = req.body;
-
         if (!data) {
             return res.status(400).json({
                 success: false,
@@ -16,23 +15,25 @@ module.exports.postTeacherData = async (req, res) => {
             });
         }
 
-        const {
+        const {name,
             email,
-            username,
             password,
-            employeeId
+            employeeId,
+            phone,gender,designation,
         } = data;
 
         if (
             !email ||
-            !username ||
             !password ||
-            !employeeId
+            !employeeId ||
+            !phone || 
+            !gender || 
+            !designation
         ) {
             return res.status(400).json({
                 success: false,
                 message:
-                    "Email, username, password and employeeId are required"
+                    "All fields are required"
             });
         }
 
@@ -40,10 +41,9 @@ module.exports.postTeacherData = async (req, res) => {
             await Teacher.findOne({
                 $or: [
                     { email },
-                    { employeeId }
+                    { phone }
                 ]
             });
-
         if (existingTeacher) {
             return res.status(409).json({
                 success: false,
@@ -56,7 +56,7 @@ module.exports.postTeacherData = async (req, res) => {
             await User.findOne({
                 $or: [
                     { email },
-                    { username }
+                    { phone }
                 ]
             });
 
@@ -78,8 +78,7 @@ module.exports.postTeacherData = async (req, res) => {
 
         const teacher =
             await Teacher.create({
-                ...data,
-                username,
+                name,employeeId,email,phone,gender,designation,
                 passwordHash
             });
 
@@ -87,7 +86,7 @@ module.exports.postTeacherData = async (req, res) => {
 
         const user =
             await User.create({
-                username,
+                username:name,
                 email,
                 passwordHash,
                 role: "Teacher",

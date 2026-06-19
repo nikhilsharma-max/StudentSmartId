@@ -6,13 +6,13 @@ const {authMiddleware} = require("../middleware/authMiddleware.js");
 const {roleMiddleware} = require("../middleware/roleMiddleware.js");
 router.use(authMiddleware);
 
-router.post("",roleMiddleware(["Admin","teacher"]),AttendanceController.postAttendanceData);
-router.get("",roleMiddleware(["Admin","teacher"]),AttendanceController.getAllAttendaceRecord);
-router.get("/student/:id",roleMiddleware(["Admin","teacher"]),AttendanceController.getAllAttendaceRecordByStudentId);//for Student profile page
-router.patch("/:id",roleMiddleware(["Admin","teacher"]),AttendanceController.updateAttendanceById);
-router.delete("/:id",roleMiddleware(["Admin"]),AttendanceController.deleteAttendanceById);
-router.get("/summary/:id",roleMiddleware(["Admin","teacher"]),AttendanceController.getSummary);
-router.get("/date/:date",roleMiddleware(["Admin","teacher"]),AttendanceController.getAttendanceByDate);
-router.put("/update-attendance",roleMiddleware(["Admin","teacher"]),AttendanceController.updateAttendance);
+router.post("",roleMiddleware(["Admin","Teacher"]),AttendanceController.postAttendanceData);
+router.get("",roleMiddleware(["Admin","Teacher"]),AttendanceController.getAllAttendaceRecord);
+router.get("/student/:id",roleMiddleware(["Admin","Teacher"]),AttendanceController.getAllAttendaceRecordByStudentId);//for Student profile page
+router.patch("/:id",roleMiddleware(["Admin","Teacher"]),AttendanceController.updateAttendanceById);
+router.delete("/:id",roleMiddleware(["Admin","Teacher"]),AttendanceController.deleteAttendanceById);
+router.get("/summary/:id",roleMiddleware(["Admin","Teacher"]),AttendanceController.getSummary);
+router.get("/date/:date",roleMiddleware(["Admin","Teacher"]),AttendanceController.getAttendanceByDate);
+router.put("/update-attendance",roleMiddleware(["Admin","Teacher"]),AttendanceController.updateAttendance);
 
 module.exports = router;
