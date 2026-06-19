@@ -11,6 +11,7 @@ import { useEffect } from 'react';
 import AttendanceRecordTable from './AttendanceRecordTable';
 import { toast } from 'react-toastify';
 import api from './api/axios';
+import { useNavigate } from 'react-router-dom';
 
 const AttendancePageContent = () => {
 const[students,setStudentAttendanceData] = useState([]);
@@ -147,7 +148,7 @@ let markAllPresent = () => {
         )
     );
 }
-
+const navigate = useNavigate();
   return (
     <div className='Attendance-page-content'>
         <Navbar SchoolName={schoolName}/>
@@ -158,7 +159,7 @@ let markAllPresent = () => {
               <h1>Track and manage student's attendance</h1>
             </div>
             <div className='Attendance-header-right'>
-                <button className='attendance-button'>Export CSV  </button>
+                <button className='attendance-button' onClick={()=>navigate("/report")} >Export CSV  </button>
                 <button className='attendance-button'>Add manual Entry</button>
             </div>
         </div>

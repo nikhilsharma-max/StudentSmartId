@@ -1,7 +1,9 @@
 const mongoose = require("mongoose");
-const {Schema} = mongoose;
 
-const schoolSettingsSchema = new mongoose.Schema({
+const schoolSettingsSchema =
+new mongoose.Schema({
+
+    // Basic School Information
 
     schoolName: {
         type: String,
@@ -11,15 +13,40 @@ const schoolSettingsSchema = new mongoose.Schema({
 
     schoolCode: {
         type: String,
-        required: true,
+        //required: true,
         unique: true,
         trim: true
     },
 
+    schoolEmail: {
+        type: String,
+        default: ""
+    },
+
+    schoolPhone: {
+        type: String,
+        default: ""
+    },
+
+    schoolAddress: {
+        type: String,
+        default: ""
+    },
+
+    principalName: {
+        type: String,
+        default: ""
+    },
+
+    // Academic Session
+
     currentSession: {
         type: String,
-        required: true
+        required: true,
+        default: "2026-27"
     },
+
+    // Attendance Configuration
 
     totalWorkingDays: {
         type: Number,
@@ -29,13 +56,11 @@ const schoolSettingsSchema = new mongoose.Schema({
 
     schoolStartTime: {
         type: String,
-        required: true,
         default: "08:00"
     },
 
     schoolEndTime: {
         type: String,
-        required: true,
         default: "14:00"
     },
 
@@ -44,25 +69,6 @@ const schoolSettingsSchema = new mongoose.Schema({
         default: "08:15"
     },
 
-    terms: [
-        {
-            termName: {
-                type: String,
-                required: true
-            },
-
-            startDate: {
-                type: Date,
-                required: true
-            },
-
-            endDate: {
-                type: Date,
-                required: true
-            }
-        }
-    ],
-
     attendanceCalculationMethod: {
         type: String,
         enum: [
@@ -70,14 +76,38 @@ const schoolSettingsSchema = new mongoose.Schema({
             "ATTENDANCE_RECORDS"
         ],
         default: "WORKING_DAYS"
-    }
+    },
 
-}, {
+    // Academic Terms
+
+    terms: [
+        {
+            termName: {
+                type: String
+            },
+
+            startDate: {
+                type: Date
+            },
+
+            endDate: {
+                type: Date
+            }
+        }
+    ]
+
+},
+{
     timestamps: true
 });
 
-let SchoolSettings = mongoose.model(
+const SchoolSettings =
+mongoose.model(
     "SchoolSettings",
     schoolSettingsSchema
 );
-module.exports = {SchoolSettings,schoolSettingsSchema}
+
+module.exports = {
+    SchoolSettings,
+    schoolSettingsSchema
+};

@@ -7,73 +7,135 @@ const {Session} = require("../models/Session.js");
 dotenv.config();
 
 
-module.exports.register = async(req,res)=>{
-    
+module.exports.register = async (req, res) => {
+
     try {
-      
-        const {username,password,email,role="Admin"} =req.body;
-        if(!username || !password || !email || !role){
+
+        const {
+            username,
+            password,
+            email,
+            registrationCode,
+            role = "Admin"
+        } = req.body;
+
+        if (
+            !username ||
+            !password ||
+            !email ||
+            !registrationCode ||
+            !role
+        ) {
             return res.status(400).json({
-                success:false,
-                message:"All fields are required"
+                success: false,
+                message: "All fields are required"
             });
         }
-        const alreadyExist = await User.findOne({
-            $or: [
-                { username },
-                { email }
-            ]
-        });
-        if(alreadyExist){
+
+        // Registration Code Validation
+
+        if (
+            registrationCode !==
+            process.env.REGISTRATION_CODE
+        ) {
+            return res.status(401).json({
+                success: false,
+                message:
+                    "Invalid registration code"
+            });
+        }
+
+        const alreadyExist =
+            await User.findOne({
+                $or: [
+                    { username },
+                    { email }
+                ]
+            });
+
+        if (alreadyExist) {
             return res.status(409).json({
-                success:false,
-                message:"User already registered",
-            })
+                success: false,
+                message:
+                    "User already registered",
+            });
         }
-        const passwordHash = crypto
-            .createHash("sha256")
-            .update(password)
-            .digest("hex");
-        // Generate a unique verification token for email verification
-        const verificationToken = crypto
-            .randomBytes(32)
-            .toString("hex");
-            //Hash the verification token before storing it in the database for security
-        const verificationTokenHash = crypto
-            .createHash("sha256")
-            .update(verificationToken)
-            .digest("hex");
-        const verificationTokenExpiry = Date.now() + 10 * 60 * 1000; // Store the hashed verification token and its expiry time in the user document
-        // Create user first
-        const newuser = await User.create({
-            username,
-            email,
-            role,
-            passwordHash,
-            verificationTokenHash,
-            verificationTokenExpiry
-        });
-        if(!newuser){
+
+        const passwordHash =
+            crypto
+                .createHash("sha256")
+                .update(password)
+                .digest("hex");
+
+        // Verification Token
+
+        const verificationToken =
+            crypto
+                .randomBytes(32)
+                .toString("hex");
+
+        const verificationTokenHash =
+            crypto
+                .createHash("sha256")
+                .update(
+                    verificationToken
+                )
+                .digest("hex");
+
+        const verificationTokenExpiry =
+            Date.now() +
+            10 * 60 * 1000;
+
+        const newuser =
+            await User.create({
+                username,
+                email,
+                role,
+                passwordHash,
+                verificationTokenHash,
+                verificationTokenExpiry
+            });
+
+        if (!newuser) {
             return res.status(400).json({
-                success:false,
-                message:"Cannot create user"
-            })
+                success: false,
+                message:
+                    "Cannot create user"
+            });
         }
-        //Send verification email with the original (unhashed) verification token
-        const verificationLink = `http://localhost:8080/verify-email?token=${verificationToken}`;
-        await sendEmail(email, "Email Verification", `Please click verify to verify your email: <a href="${verificationLink}">Verify Email</a> Link will expire in 10 minutes.`);   
+
+        const verificationLink =
+            `http://localhost:8080/verify-email?token=${verificationToken}`;
+
+        await sendEmail(
+            email,
+            "Email Verification",
+            `Please click verify to verify your email:
+            <a href="${verificationLink}">
+            Verify Email
+            </a>
+            Link will expire in 10 minutes.`
+        );
+
         return res.status(201).json({
-            "success": true,
-            "message": "Registration successful. Please verify your email.",
-            "user": newuser
+            success: true,
+            message:
+                "Registration successful. Please verify your email.",
+            user: newuser
         });
+
     } catch (error) {
+
+        console.log(error);
+
         return res.status(500).json({
-            success:false,
-            message:"Something went wrong",
-        })
+            success: false,
+            message:
+                "Something went wrong",
+        });
+
     }
-}
+};
 
 module.exports.verify = async(req,res)=>{
     console.log("User request aayi hai")

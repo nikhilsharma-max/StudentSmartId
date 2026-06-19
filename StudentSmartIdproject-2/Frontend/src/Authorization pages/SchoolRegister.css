@@ -135,3 +135,23 @@
 .login-link:hover {
   text-decoration: underline;
 }
+.password-input-container{
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.password-input-container input{
+    width: 100%;
+}
+
+.password-toggle-btn{
+    position: absolute;
+    right: 12px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    color: #64748b;
+}

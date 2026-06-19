@@ -1,35 +1,130 @@
 const {teacherSchema,Teacher} = require("../models/Teachers.js");
 const { logActivity } = require("../Services/activityLogger.js");
+const crypto = require("crypto");
+const { User } = require("../models/User");
 
 
-module.exports.postTeacherData = async(req,res)=>{
+module.exports.postTeacherData = async (req, res) => {
     try {
-        let data = req.body;
-        if(!data){
+
+        const data = req.body;
+
+        if (!data) {
             return res.status(400).json({
-                success:false,
-                message:"No data to add"
-            })
+                success: false,
+                message: "No data to add"
+            });
         }
-        let addedData = Teacher.insertMany(data);
-        if(!addedData){
+
+        const {
+            email,
+            username,
+            password,
+            employeeId
+        } = data;
+
+        if (
+            !email ||
+            !username ||
+            !password ||
+            !employeeId
+        ) {
             return res.status(400).json({
-                success:false,
-                message:"Cannot add data",
-            })
+                success: false,
+                message:
+                    "Email, username, password and employeeId are required"
+            });
         }
-        await logActivity(req.user.userId, "CREATE_TEACHER", "Teacher", addedData[0]._id, "Teacher record created",null,addedData[0]._id);  
+
+        const existingTeacher =
+            await Teacher.findOne({
+                $or: [
+                    { email },
+                    { employeeId }
+                ]
+            });
+
+        if (existingTeacher) {
+            return res.status(409).json({
+                success: false,
+                message:
+                    "Teacher already exists"
+            });
+        }
+
+        const existingUser =
+            await User.findOne({
+                $or: [
+                    { email },
+                    { username }
+                ]
+            });
+
+        if (existingUser) {
+            return res.status(409).json({
+                success: false,
+                message:
+                    "User already exists"
+            });
+        }
+
+        const passwordHash =
+            crypto
+                .createHash("sha256")
+                .update(password)
+                .digest("hex");
+
+        // Create Teacher
+
+        const teacher =
+            await Teacher.create({
+                ...data,
+                username,
+                passwordHash
+            });
+
+        // Create User
+
+        const user =
+            await User.create({
+                username,
+                email,
+                passwordHash,
+                role: "Teacher",
+                teacherId:
+                    teacher._id,
+                isVerified: true
+            });
+
+        await logActivity(
+            req.user.userId,
+            "CREATE_TEACHER",
+            "Teacher",
+            teacher._id,
+            "Teacher record created",
+            null,
+            teacher
+        );
+
         return res.status(201).json({
-            success:true,
-            message:"Data added succesfully"
-        })
+            success: true,
+            message:
+                "Teacher created successfully",
+            teacher,
+            user
+        });
+
     } catch (error) {
+
+        console.log(error);
+
         return res.status(500).json({
-            success:false,
-            message:"Something went wrong",
-        })
-    }
-}
+            success: false,
+            message:
+                "Something went wrong"
+        });
+
+}}
 
 module.exports.getAllTeacher = async(req,res)=>{
     try {
@@ -129,32 +224,64 @@ module.exports.updateTeacherById = async(req,res)=>{
     }
 }
 
-module.exports.deleteById = async(req,res)=>{
-    let {id} = req.params;
+module.exports.deleteById = async (req, res) => {
+
+    const { id } = req.params;
+
     try {
-        if(!id){
+
+        if (!id) {
             return res.status(400).json({
-                success:false,
-                message:"Id not provided",
-            })
-        }
-        let deletedData = await Teacher.findByIdAndDelete(id);
-        if(!deletedData){
-            return res.status(404).json({
-                success:false,
-                message:"Data cannot be deleted",
+                success: false,
+                message:
+                    "Id not provided"
             });
         }
-        await logActivity(req.user.userId, "DELETE_TEACHER", "Teacher", deletedData._id, "Teacher record deleted",deletedData,null);
+
+        const deletedTeacher =
+            await Teacher.findByIdAndDelete(
+                id
+            );
+
+        if (!deletedTeacher) {
+            return res.status(404).json({
+                success: false,
+                message:
+                    "Teacher not found"
+            });
+        }
+
+        await User.findOneAndDelete({
+            teacherId:
+                deletedTeacher._id
+        });
+
+        await logActivity(
+            req.user.userId,
+            "DELETE_TEACHER",
+            "Teacher",
+            deletedTeacher._id,
+            "Teacher record deleted",
+            deletedTeacher,
+            null
+        );
+
         return res.status(200).json({
-            success:true,
-            message:"Deleted successfully",
-            deletedData
-        })
+            success: true,
+            message:
+                "Teacher deleted successfully",
+            deletedTeacher
+        });
+
     } catch (error) {
+
+        console.log(error);
+
         return res.status(500).json({
-            success:false,
-            message:"Something went wrong",
-        })
+            success: false,
+            message:
+                "Something went wrong"
+        });
+
     }
-}
+};
