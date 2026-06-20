@@ -1,7 +1,7 @@
 import React from 'react'
 import './SidebarItem.css'
 
-const Sidebarlogo = ({collapse}) => {
+const Sidebarlogo = ({userName,collapse}) => {
   return (
     <div>
         <div className='admin-section'>
@@ -11,7 +11,7 @@ const Sidebarlogo = ({collapse}) => {
             </div>
             {!collapse && 
             <div className='admin-name'>
-               Welcome Nikhil
+               Welcome {userName}
             </div>
             }
         </div>

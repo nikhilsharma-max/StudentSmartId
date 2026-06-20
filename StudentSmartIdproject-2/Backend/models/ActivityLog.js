@@ -36,7 +36,7 @@ const activityLogSchema = new mongoose.Schema({
         required: true,
         enum: [
             "Student",
-            "Class",
+            "Classes",
             "Attendance",
             "Teacher"
         ]

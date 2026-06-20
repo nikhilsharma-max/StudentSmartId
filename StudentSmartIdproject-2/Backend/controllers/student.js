@@ -1,7 +1,9 @@
 // Controller callback to get sudents from database
 const {studentSchema,Student} = require("../models/Student.js");
 const { logActivity } = require("../Services/activityLogger.js");
-
+const cloudinary = require("../config/cloudinary");
+const streamifier = require("streamifier");
+const uploadMiddleware = require("../middleware/uploadMiddleware.js");
 module.exports.getStudent = async (req, res) => {
     try {
         let data = await Student.find().populate("classId");
@@ -155,4 +157,95 @@ module.exports.updateStudentById = async(req,res)=>{
         })
     }
 }
+
+module.exports.updateStudentPhoto = async (req, res) => {
+    try {
+
+        const { id } = req.params;
+
+        if (!id) {
+            return res.status(400).json({
+                success: false,
+                message: "Student id required"
+            });
+        }
+        if (!req.file) {
+            return res.status(400).json({
+                success: false,
+                message: "Photo is required"
+            });
+        }
+
+        const student = await Student.findById(id);
+        if (!student) {
+            return res.status(404).json({
+                success: false,
+                message: "Student not found"
+            });
+        }
+       
+console.log(req.file?.buffer?.length);
+        const uploadResult = await new Promise(
+            
+            (resolve, reject) => {
+
+                const uploadStream =
+                    cloudinary.uploader.upload_stream(
+                        {
+                           
+                        },
+                        (error, result) => {
+                                console.log("Cloudinary Error:", error);
+    console.log("Cloudinary Result:", result);
+
+                            if (error) {
+                                reject(error);
+                            } else {
+                                resolve(result);
+                            }
+
+                        }
+                    );
+
+                streamifier
+                    .createReadStream(req.file.buffer)
+                    .pipe(uploadStream);
+
+            }
+        );
+        const oldData = {
+            profilePhoto: student.profilePhoto
+        };
+
+        student.profilePhoto =
+            uploadResult.secure_url;
+
+        await student.save();
+
+        await logActivity(
+            req.user.userId,
+            "UPDATE_STUDENT_PHOTO",
+            "Student",
+            student._id,
+            "Student photo updated",
+            oldData,
+            { profilePhoto: student.profilePhoto }
+        );
+
+        return res.status(200).json({
+            success: true,
+            message: "Photo updated successfully",
+            photoUrl: student.profilePhoto
+        });
+
+    } catch (error) {
+
+
+        return res.status(500).json({
+            success: false,
+            message: "Failed to upload photo"
+        });
+
+    }
+};
 

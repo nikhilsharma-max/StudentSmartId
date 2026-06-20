@@ -467,7 +467,7 @@ const SchoolSettingsPageContent = () => {
             <input
               type="text"
               name="section"
-              placeholder="Section"
+              placeholder="Section : A,B,C,D and E Only"
               value={classForm?.section}
               onChange={handleClassChange}
             />
@@ -491,7 +491,7 @@ const SchoolSettingsPageContent = () => {
                   );
                   console.log(response.data);
                 setClasses(
-                  response.data.data
+                  response.data.classes
                 );
 
                 toast.success(

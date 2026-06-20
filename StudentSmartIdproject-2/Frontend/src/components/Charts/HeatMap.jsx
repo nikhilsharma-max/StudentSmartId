@@ -1,7 +1,6 @@
 import React from 'react'
 import './HeatMap.css'
 const HeatMap = ({attendanceData}) => {
-  console.log(attendanceData);
   return (
 <div className="heatmap">
   {attendanceData.map((record) => (

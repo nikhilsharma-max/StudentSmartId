@@ -273,6 +273,19 @@ module.exports.refreshRoute = async(req,res)=>{
                 message:"Refresh token not found, please login again",
             })
         }
+        try{
+            jwt.verify(
+                refreshToken,
+                process.env.JWT_SECRET_KEY
+            );
+        }
+        catch(err){
+            return res.status(401).json({
+                success:false,
+                message:"Invalid refresh token"
+            });
+        }
+
         const refreshTokenHash = crypto
             .createHash("sha256")
             .update(refreshToken)

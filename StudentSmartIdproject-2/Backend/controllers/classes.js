@@ -4,7 +4,6 @@ const { Student } = require("../models/Student");
 
 module.exports.postClasses = async(req,res)=>{
     let data = req.body;
-    console.log(data);
     try {
         const classes = await Classes.insertMany(data);
         if(!classes){
@@ -19,7 +18,6 @@ module.exports.postClasses = async(req,res)=>{
             message:"Added data succesfully",
         })
     } catch (error) {
-        console.log(error);
         return res.status(500).json({
             success:false,
             message:"Something went wrong"

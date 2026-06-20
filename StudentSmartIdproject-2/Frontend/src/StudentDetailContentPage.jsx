@@ -16,6 +16,7 @@ import api from './api/axios';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 
+
 const StudentDetailContentPage = () => {
 const [schoolName, setSchoolName] = useState("School's Name");
 const [attendanceSummary, setAttendanceSummary] = useState([]);
@@ -52,7 +53,7 @@ const confirmDelete = async () => {
 
   } catch (error) {
 
-    console.log(error);
+   
 
     toast.error(
       "Failed to delete student"
@@ -72,21 +73,20 @@ useEffect(() => {
         `/student/${id}`
       );
       const response2 = await api.get(`/dashboard/heatmap/${id}`);
-      setAttendanceData(response2.data.data);
+      setAttendanceData(response2?.data?.data);
       setSchoolName(
-        response.data.data[0].schoolName
+        response?.data?.data[0]?.schoolName
       );
 
       setAttendanceSummary(
-        attendanceSummaryData.data.message
+        attendanceSummaryData?.data?.message
       );
 
       setStudentDetails(
-        studentDetailsData.data.student
+        studentDetailsData?.data?.student
       );
 
     } catch (error) {
-      console.log(error);
       toast.error(
         "Cannot fetch student's detail"
       );
@@ -95,9 +95,9 @@ useEffect(() => {
 
   getDetails();
 }, [id]);
-          let present = attendanceSummary.presentCount;
-          let absent = attendanceSummary.lateCount;
-          let late = attendanceSummary.lateCount;
+          let present = attendanceSummary?.presentCount;
+          let absent = attendanceSummary?.absentCount;
+          let late = attendanceSummary?.lateCount;
   return (
     <div className='Dashboard'>
       <Navbar SchoolName={schoolName}/>
@@ -120,7 +120,11 @@ useEffect(() => {
 
       {/* Row one  Profile card and attendance summary */}
       <div className='row-one-details'>
-        <ProfileCard studentData={studentDetails}/>
+        <ProfileCard
+          studentData={studentDetails}
+          studentId={id}
+          setStudentDetails={setStudentDetails}
+        />
         <div className='AttendanceSummary'>
           <CardSmall heading="Attendance %" data={((present)/(present+absent)*(100)).toFixed(2)} detail="Total attendance %" icon={ShieldCheck} />
           <CardSmall heading="Present Days" data={present} detail="Days present in school" icon={UserCheck} />
