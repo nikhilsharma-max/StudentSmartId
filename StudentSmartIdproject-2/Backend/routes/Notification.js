@@ -9,7 +9,7 @@ const {
     getNotificationById,
     deleteNotification
 } = require(
-    "../controllers/notification"
+    "../controllers/Notification.js"
 );
 
 router.post(
