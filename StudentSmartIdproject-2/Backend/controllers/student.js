@@ -249,3 +249,52 @@ console.log(req.file?.buffer?.length);
     }
 };
 
+module.exports.getStudentsForAttendance = async(req,res)=>{
+    try{
+
+        const {
+            className,
+            section
+        } = req.query;
+
+        let students =
+            await Student.find()
+            .populate("classId");
+
+        if(className){
+            students = students.filter(
+                student =>
+                    student?.classId?.className ===
+                    className
+            );
+        }
+
+        if(section){
+            students = students.filter(
+                student =>
+                    student?.section ===
+                    section
+            );
+        }
+
+        students.sort((a,b)=>
+            a.rollNumber - b.rollNumber
+        );
+
+        return res.status(200).json({
+            success:true,
+            students
+        });
+
+    }
+    catch(error){
+
+        console.log(error);
+
+        return res.status(500).json({
+            success:false,
+            message:"Failed to load students"
+        });
+
+    }
+}

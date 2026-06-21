@@ -17,7 +17,7 @@ require("dotenv").config();
 const app = express();
 app.use(
   cors({
-    origin: "http://localhost:8080",
+    origin: process.env.FRONTEND_URL,
     credentials: true
   })
 );
@@ -36,16 +36,13 @@ async function main() {
     try {
         //connect to atlas
         await mongoose.connect(url);
-        console.log("Connected to mongodb atlas")
+        console.log("Connection to database successful")
     } catch (error) {
         console.log(error);
     }   
 }
 main();
-app.use((req,res,next)=>{
-    console.log("GLOBAL MIDDLEWARE:", req.method, req.url);
-    next();
-});
+
 
 app.get("/ping", (req,res)=>{
     console.log("PING HIT");

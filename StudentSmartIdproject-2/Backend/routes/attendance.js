@@ -8,6 +8,17 @@ router.use(authMiddleware);
 
 router.post("",roleMiddleware(["Admin","Teacher"]),AttendanceController.postAttendanceData);
 router.get("",roleMiddleware(["Admin","Teacher"]),AttendanceController.getAllAttendaceRecord);
+router.get(
+    "/check-today",
+    roleMiddleware(["Admin","Teacher"]),
+    AttendanceController.checkTodayAttendance
+);
+
+router.post(
+    "/manual-entry",
+    roleMiddleware(["Admin","Teacher"]),
+    AttendanceController.manualAttendanceEntry
+);
 router.get("/student/:id",roleMiddleware(["Admin","Teacher"]),AttendanceController.getAllAttendaceRecordByStudentId);//for Student profile page
 router.patch("/:id",roleMiddleware(["Admin","Teacher"]),AttendanceController.updateAttendanceById);
 router.delete("/:id",roleMiddleware(["Admin","Teacher"]),AttendanceController.deleteAttendanceById);

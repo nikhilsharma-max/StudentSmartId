@@ -1,5 +1,6 @@
 const {Attendance,attendanceSchema} = require("../models/Attendace.js");
 const { logActivity } = require("../Services/activityLogger.js");
+const { Student } = require("../models/Student");
 
 module.exports.postAttendanceData = async(req,res)=>{
     let data = req.body;
@@ -345,3 +346,188 @@ console.log(attendance);
   }
 
 }
+
+module.exports.checkTodayAttendance = async(req,res)=>{
+
+    try{
+
+        const {
+            className,
+            section
+        } = req.query;
+
+        if(
+            !className ||
+            !section
+        ){
+            return res.status(400).json({
+                success:false,
+                message:"Class and section are required"
+            });
+        }
+
+        let students =
+            await Student.find({
+                section
+            }).populate("classId");
+
+        students = students.filter(
+            student =>
+                student?.classId?.className ===
+                className
+        );
+
+        const studentIds =
+            students.map(
+                student => student._id
+            );
+
+        const startOfDay =
+            new Date();
+
+        startOfDay.setHours(
+            0,0,0,0
+        );
+
+        const endOfDay =
+            new Date();
+
+        endOfDay.setHours(
+            23,59,59,999
+        );
+
+        const attendanceExists =
+            await Attendance.findOne({
+                studentId:{
+                    $in: studentIds
+                },
+                date:{
+                    $gte:startOfDay,
+                    $lte:endOfDay
+                }
+            });
+
+        return res.status(200).json({
+            success:true,
+            exists: !!attendanceExists
+        });
+
+    }
+    catch(error){
+
+        console.log(error);
+
+        return res.status(500).json({
+            success:false,
+            message:"Something went wrong"
+        });
+
+    }
+};
+
+module.exports.manualAttendanceEntry = async(req,res)=>{
+
+    try{
+
+        const {
+            attendance
+        } = req.body;
+
+        if(
+            !attendance ||
+            attendance.length === 0
+        ){
+            return res.status(400).json({
+                success:false,
+                message:"Attendance data required"
+            });
+        }
+
+        const studentIds =
+            attendance.map(
+                item => item.studentId
+            );
+
+        const startOfDay =
+            new Date();
+
+        startOfDay.setHours(
+            0,0,0,0
+        );
+
+        const endOfDay =
+            new Date();
+
+        endOfDay.setHours(
+            23,59,59,999
+        );
+
+        const alreadyExists =
+            await Attendance.findOne({
+                studentId:{
+                    $in: studentIds
+                },
+                date:{
+                    $gte:startOfDay,
+                    $lte:endOfDay
+                }
+            });
+
+        if(alreadyExists){
+            return res.status(400).json({
+                success:false,
+                message:
+                "Attendance already submitted for today"
+            });
+        }
+
+        const attendanceRecords =
+            attendance.map(
+                item => ({
+                    studentId:
+                        item.studentId,
+
+                    status:
+                        item.status,
+
+                    date:
+                        new Date(),
+
+                    markedBy:
+                        "Teacher"
+                })
+            );
+
+        const createdAttendance =
+            await Attendance.insertMany(
+                attendanceRecords
+            );
+
+        await logActivity(
+            req.user.userId,
+            "CREATE_ATTENDANCE",
+            "Attendance",
+            null,
+            "Manual attendance created",
+            null,
+            createdAttendance
+        );
+
+        return res.status(201).json({
+            success:true,
+            message:
+            "Attendance submitted successfully"
+        });
+
+    }
+    catch(error){
+
+        console.log(error);
+
+        return res.status(500).json({
+            success:false,
+            message:"Something went wrong"
+        });
+
+    }
+};

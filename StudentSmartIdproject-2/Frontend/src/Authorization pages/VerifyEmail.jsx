@@ -22,7 +22,7 @@ function VerifyEmail() {
         }
   
         await axios.get(
-          `http://localhost:8000/auth/verify-email?token=${token}`
+          `${import.meta.env.VITE_API_URL}/auth/verify-email?token=${token}`
         );
         toast.success("Email verified Successfully");
         setStatus("success");

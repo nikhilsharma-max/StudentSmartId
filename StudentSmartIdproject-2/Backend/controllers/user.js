@@ -5,6 +5,9 @@ const jwt = require('jsonwebtoken');
 const dotenv = require('dotenv');
 const {Session} = require("../models/Session.js");
 dotenv.config();
+const isProduction =
+    process.env.NODE_ENV === "production";
+
 
 
 module.exports.register = async (req, res) => {
@@ -105,8 +108,8 @@ module.exports.register = async (req, res) => {
         }
 
         const verificationLink =
-            `http://localhost:8080/verify-email?token=${verificationToken}`;
-
+            `${process.env.FRONTEND_URL}/verify-email?token=${verificationToken}`;
+            
         await sendEmail(
             email,
             "Email Verification",
@@ -244,8 +247,10 @@ module.exports.login = async(req,res)=>{
         );
         res.cookie("refreshToken", refreshToken, {
             httpOnly: true,
-            secure:false, // Set to true in production with HTTPS
-            sameSite: "strict",
+    secure: isProduction,
+    sameSite: isProduction
+        ? "none"
+        : "strict",
             maxAge: 7 * 24 * 60 * 60 * 1000
         });
         return res.status(201).json({
@@ -321,7 +326,6 @@ module.exports.refreshRoute = async(req,res)=>{
             token: accessToken,
         })
     } catch (error) {
-        console.log("Error during token refresh:", error);
         return res.status(500).json({
             success:false,
             message:"Something went wrong",

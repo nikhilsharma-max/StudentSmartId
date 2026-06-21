@@ -18,7 +18,7 @@ const ProtectedRoute = ({ children }) => {
 
             try {
                 await axios.get(
-                    "http://localhost:8000/auth/me",
+                    `${import.meta.env.VITE_API_URL}/auth/me`,
                     {
                         headers: {
                             Authorization: `Bearer ${token}`,

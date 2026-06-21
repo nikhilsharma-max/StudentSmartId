@@ -160,7 +160,7 @@ const navigate = useNavigate();
             </div>
             <div className='Attendance-header-right'>
                 <button className='attendance-button' onClick={()=>navigate("/report")} >Export CSV  </button>
-                <button className='attendance-button'>Add manual Entry</button>
+                <button className='attendance-button' onClick={()=>navigate("/attendance/create")}>Add manual Entry</button>
             </div>
         </div>
         <div className='Attendance-filter-section'>

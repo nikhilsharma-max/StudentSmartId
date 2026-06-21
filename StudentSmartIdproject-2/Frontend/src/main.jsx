@@ -25,6 +25,7 @@ import EditStudent from './components/Edit Student/EditStudent'
 import NotificationPageContent from './Notifications/NotificationPageContent'
 import ReportsPageContent from './Reports/ReportsPageContent'
 import SchoolSettingsPageContent from './SchoolSettings/SchoolSettingsPageContent'
+import AttendanceCreatePage from './AttendanceCreate/AttendanceCreatePage'
 
 const router = createBrowserRouter([
   {
@@ -75,6 +76,10 @@ const router = createBrowserRouter([
       {
         path: '/attendance',
         element: <AttendancePageContent />
+      },
+      {
+        path:'/attendance/create',
+        element:<AttendanceCreatePage/>
       },
       {
         path: '/classes',
