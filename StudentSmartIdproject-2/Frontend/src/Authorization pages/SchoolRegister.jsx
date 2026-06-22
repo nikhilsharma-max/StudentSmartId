@@ -53,7 +53,7 @@ function SchoolRegister() {
       setLoading(true);
 
       await axios.post(
-        `${import.meta.env.VITE_API_URL}/auth/refresh`,
+        `${import.meta.env.VITE_API_URL}/auth/register`,
         {
           schoolName:
             formData.schoolName,
