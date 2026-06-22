@@ -5,18 +5,35 @@ require("dotenv").config({
     path: path.resolve(__dirname, "../.env")
 });
 
+// const transporter = nodemailer.createTransport({
+//     service: 'gmail',
+//     host: 'smtp.gmail.com',
+//     port: 465,
+//     secure: true,   
+//     auth: {
+//         user: process.env.HOST,
+//         pass: process.env.APP_PASSWORD
+//     }
+// });
 const transporter = nodemailer.createTransport({
     service: 'gmail',
     host: 'smtp.gmail.com',
-    port: 465,
-    secure: true,   
+    port: 587,
+    secure: false,
     auth: {
         user: process.env.HOST,
         pass: process.env.APP_PASSWORD
     }
 });
-
+transporter.verify((error, success) => {
+    if (error) {
+        console.error("SMTP Verify Error:", error);
+    } else {
+        console.log("SMTP Server Ready");
+    }
+});
 async function sendEmail(to, subject, text){
+    console.log("Sending email to:", to);
     const mailOptions = {
         from: process.env.HOST,
         to,
