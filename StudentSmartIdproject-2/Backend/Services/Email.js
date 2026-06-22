@@ -1,10 +1,10 @@
+
 const path = require("path");
-const { Resend } = require("resend");
 
 require("dotenv").config({
     path: path.resolve(__dirname, "../.env")
 });
-
+const { Resend } = require("resend");
 const resend = new Resend(process.env.RESEND_API_KEY);
 
 async function sendEmail(to, subject, html) {
