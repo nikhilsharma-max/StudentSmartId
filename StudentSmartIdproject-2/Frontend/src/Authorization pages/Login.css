@@ -73,19 +73,22 @@
   border-color: #6f7df5;
 }
 
-.password-container {
-  display: flex;
-
-  gap: 10px;
+.password-container{
+  display:flex;
+  gap:10px;
+  width:100%;
 }
 
-.password-container input {
-  flex: 1;
+.password-container input{
+  flex:1;
+  min-width:0;
 }
+
 
 .show-password-btn {
   border: none;
-
+  flex-shrink:0;
+  width:75px;
   background: #e9ecff;
 
   color: #4d5cf0;

@@ -1,5 +1,5 @@
 .admin-page{
-height: 100vh;
-display: flex;
-overflow: hidden;
+    min-height:100vh;
+    display:flex;
+    overflow-x:hidden;
 }
